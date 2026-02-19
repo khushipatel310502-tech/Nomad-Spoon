@@ -1,0 +1,146 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; overflow-x: hidden; background: #fff; }
+img, svg { max-width: 100%; height: auto; }
+
+:root {
+  --container-pad: clamp(16px, 4vw, 80px);
+  --container-pad-lg: clamp(16px, 4.5vw, 90px);
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Ensure root content always occupies full viewport width */
+body > #app {
+  width: 100vw;
+  max-width: 100%;
+}
+
+/* Make exported fixed-width blocks fluid */
+#app [style*="width: 1280px"],
+#app [style*="width: 1307.64px"],
+#app [style*="width: 600px"],
+#app [style*="width: 476px"],
+#app [style*="width: 400px"],
+#app [style*="width: 320px"],
+#app [style*="width: 300px"],
+#app [style*="width: 188px"],
+#app [style*="width: 457px"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+#app [style*="width: 352px;"] { width: min(352px, 100%) !important; }
+#app [style*="width: 265px;"] { width: min(265px, 100%) !important; }
+
+/* Keep hero image section fluid but proportional */
+#app [style*="height: 800px;"] {
+  height: clamp(420px, 70vh, 800px) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Replace hardcoded horizontal paddings with responsive paddings */
+#app [style*="padding-left: 80px"] { padding-left: var(--container-pad) !important; }
+#app [style*="padding-right: 80px"] { padding-right: var(--container-pad) !important; }
+#app [style*="padding-left: 90px"] { padding-left: var(--container-pad-lg) !important; }
+#app [style*="padding-right: 90px"] { padding-right: var(--container-pad-lg) !important; }
+
+/* Prevent shrink-to-fit behavior from inline-flex */
+#app [style*="display: inline-flex"] {
+  display: flex !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Top-level exported sections should stretch full width */
+#app > div {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Better placeholder image behavior */
+#app img { display: block; }
+
+/* Non-absolute images stay fluid */
+#app img:not([style*="position: absolute"]) {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Absolutely positioned export images are scaled by JS */
+#app img[style*="position: absolute"] {
+  max-width: none;
+  transform-origin: top left;
+  will-change: width, height, left, top;
+}
+
+/* Row containers should be allowed to wrap on smaller widths */
+#app [style*="align-self: stretch"][style*="display: inline-flex"],
+#app [style*="justify-content: flex-start"][style*="align-items: center"][style*="display: inline-flex"] {
+  flex-wrap: wrap;
+}
+
+/* Typography scaling for large title text */
+#app [style*="font-size: 57px"] {
+  font-size: clamp(30px, 6vw, 57px) !important;
+  line-height: 1.15 !important;
+}
+#app [style*="font-size: 52px"] {
+  font-size: clamp(28px, 5.5vw, 52px) !important;
+  line-height: 1.15 !important;
+}
+
+/* Mobile navigation controls */
+.site-nav { position: sticky; top: 0; z-index: 40; }
+.nav-toggle {
+  display: none;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 991px) {
+  #app [style*="gap: 120px"] { gap: 32px !important; }
+  #app [style*="gap: 40px"] { gap: 20px !important; }
+  #app [style*="gap: 32px"] { gap: 16px !important; }
+  #app [style*="padding-top: 120px"] { padding-top: 64px !important; }
+  #app [style*="padding-bottom: 120px"] { padding-bottom: 64px !important; }
+
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+
+  #nav-links,
+  #nav-actions {
+    width: 100%;
+    display: none !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    margin-top: 12px;
+  }
+
+  #site-nav.nav-open #nav-links,
+  #site-nav.nav-open #nav-actions {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #app [style*="height: 291px"] { min-height: 291px; height: auto !important; }
+  #app [style*="height: 253px"] { min-height: 253px; }
+  #app [style*="font-size: 26px"] { font-size: clamp(20px, 5.5vw, 26px) !important; }
+  #app [style*="font-size: 19px"] { font-size: clamp(16px, 4.6vw, 19px) !important; }
+  #app [style*="font-size: 16px"] { font-size: clamp(14px, 4.2vw, 16px) !important; }
+}

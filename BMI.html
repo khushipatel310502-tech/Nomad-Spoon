@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMI</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+<div id="app">
+
+<div id="site-nav" class="site-nav" data-property-1="Product" style="width: 100%; padding-left: 80px; padding-right: 80px; padding-top: 20px; padding-bottom: 20px; background: #546D46; justify-content: space-between; align-items: center; display: inline-flex">
+  <div style="width: 94.74px; height: 49px; justify-content: flex-start; align-items: center; display: flex">
+    <div style="flex: 1 1 0; height: 49px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+      <div style="align-self: stretch; height: 49px; position: relative; overflow: hidden">
+        <div data-svg-wrapper style="left: 38.51px; top: 23.81px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.20773 11.438C2.44033 11.438 1.20293 11.0868 0.208826 10.2739C-0.0344742 10.0765 -0.0567745 9.8345 0.0983255 9.5714L0.695326 8.6716C0.871626 8.3862 1.11483 8.3638 1.38043 8.5624C2.13133 9.0899 3.03733 9.3964 3.92103 9.3964C5.07033 9.3964 5.71073 8.9136 5.71073 8.0796C5.71073 7.3548 5.22423 7.0036 3.65663 6.7628C1.07143 6.3681 0.144327 5.3579 0.144327 3.3597C0.144327 1.3615 1.73542 0 4.16552 0C5.42522 0 6.59563 0.3078 7.43583 0.8564C7.70143 1.0326 7.72253 1.2734 7.56863 1.5589L7.01632 2.4376C6.84012 2.723 6.61923 2.7453 6.33123 2.5691C5.77893 2.2179 5.11623 2.0416 4.43113 2.0416C3.21603 2.0416 2.55333 2.5021 2.55333 3.3585C2.55333 4.0386 3.01753 4.3464 4.51923 4.566C7.12563 4.9396 8.09863 5.9933 8.09863 8.0784C8.09863 10.1634 6.59683 11.438 4.21023 11.438H4.20773Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 49.85px; top: 23.81px; position: absolute">
+          <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5923 4.1713V7.2666C8.5923 9.9673 7.2221 11.438 4.7262 11.438C3.7544 11.438 2.9812 11.1525 2.4512 10.5816H2.4065V14.1821C2.4065 14.511 2.2303 14.6872 1.8989 14.6872H0.507603C0.176303 14.6872 0 14.511 0 14.1821V4.1713C0 1.493 1.5018 0 4.2856 0C7.0694 0 8.5935 1.493 8.5935 4.1713H8.5923ZM6.1845 4.3699C6.1845 2.8111 5.5875 2.0652 4.2844 2.0652C2.9812 2.0652 2.4065 2.8111 2.4065 4.3699V7.0929C2.4065 8.6083 3.047 9.3765 4.2844 9.3765C5.5875 9.3765 6.1845 8.6306 6.1845 7.0929V4.3699Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 61.91px; top: 23.81px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5935 4.1713V7.2667C8.5935 9.9673 7.0694 11.438 4.3079 11.438C1.5464 11.438 0 9.9673 0 7.2667V4.1713C0 1.4707 1.5241 0 4.3079 0C7.0917 0 8.5935 1.4707 8.5935 4.1713ZM6.1857 4.3476C6.1857 2.8111 5.5676 2.0639 4.3079 2.0639C3.0482 2.0639 2.4078 2.8098 2.4078 4.3476V7.0706C2.4078 8.6294 3.0258 9.3753 4.3079 9.3753C5.59 9.3753 6.1857 8.6294 6.1857 7.0706V4.3476Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 73.97px; top: 23.81px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5935 4.1713V7.2667C8.5935 9.9673 7.0694 11.438 4.3079 11.438C1.5464 11.438 0 9.9673 0 7.2667V4.1713C0 1.4707 1.5241 0 4.3079 0C7.0918 0 8.5935 1.4707 8.5935 4.1713ZM6.1857 4.3476C6.1857 2.8111 5.5677 2.0639 4.3079 2.0639C3.0482 2.0639 2.4078 2.8098 2.4078 4.3476V7.0706C2.4078 8.6294 3.0259 9.3753 4.3079 9.3753C5.59 9.3753 6.1857 8.6294 6.1857 7.0706V4.3476Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 86.30px; top: 23.81px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.0083 4.2595C6.0083 2.7664 5.4336 2.0639 4.2186 2.0639C3.0035 2.0639 2.4065 2.7664 2.4065 4.2595V10.6698C2.4065 10.9986 2.2303 11.1749 1.8989 11.1749H0.507599C0.176199 11.1749 0 10.9986 0 10.6698V4.1056C0 1.4273 1.4807 0 4.2198 0C6.959 0 8.4173 1.4273 8.4173 4.1056V10.6698C8.4173 10.9986 8.241 11.1749 7.9096 11.1749H6.5184C6.187 11.1749 6.0107 10.9986 6.0107 10.6698V4.2595H6.0083Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 38.62px; top: 8.10px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.9722 4.25949C5.9722 2.76639 5.4013 2.06399 4.1937 2.06399C2.9861 2.06399 2.3928 2.76639 2.3928 4.25949V10.6698C2.3928 10.9987 2.2166 11.1749 1.8877 11.1749H0.5051C0.1762 11.1749 0 10.9987 0 10.6698V4.10559C0 1.42727 1.4707 0 4.1937 0C6.9167 0 8.3651 1.42727 8.3651 4.10559V10.6698C8.3651 10.9987 8.1889 11.1749 7.86 11.1749H6.4774C6.1485 11.1749 5.9722 10.9987 5.9722 10.6698V4.25949Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 49.18px; top: 8.10px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5413 4.17139V7.26669C8.5413 9.96729 7.0259 11.438 4.2818 11.438C1.5377 11.438 0 9.96729 0 7.26669V4.17139C0 1.47071 1.5154 0 4.2818 0C7.0483 0 8.5413 1.47071 8.5413 4.17139ZM6.1485 4.34759C6.1485 2.81109 5.5341 2.06399 4.2818 2.06399C3.0295 2.06399 2.3941 2.80989 2.3941 4.34759V7.07059C2.3941 8.62939 3.0084 9.37529 4.2818 9.37529C5.5552 9.37529 6.1485 8.62939 6.1485 7.07059V4.34759Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 59.92px; top: 8.10px; position: absolute">
+          <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.9837 4.10559V10.6698C13.9837 10.9987 13.8074 11.1749 13.4785 11.1749H12.0959C11.767 11.1749 11.5908 10.9987 11.5908 10.6698V4.23709C11.5908 2.76639 11.0422 2.06399 9.878 2.06399C8.7139 2.06399 8.1876 2.76639 8.1876 4.23709V10.6698C8.1876 10.9987 8.0114 11.1749 7.6825 11.1749H6.2999C5.971 11.1749 5.7948 10.9987 5.7948 10.6698V4.23709C5.7948 2.76639 5.2462 2.06399 4.0609 2.06399C2.9414 2.06399 2.3929 2.76639 2.3929 4.23709V10.6698C2.3929 10.9987 2.2166 11.1749 1.8877 11.1749H0.5051C0.1762 11.1749 0 10.9987 0 10.6698V4.10559C0 1.44961 1.3826 0 3.9294 0C5.2909 0 6.3222 0.43935 6.9589 1.25103H7.0024C7.6391 0.43935 8.6493 0 10.0096 0C12.5787 0 13.9837 1.44961 13.9837 4.10559Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 75.88px; top: 8.11px; position: absolute">
+          <svg width="9" height="12" viewBox="0 0 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.3862 4.34511V7.26541C8.3862 9.94371 6.8708 11.4368 4.0833 11.4368C1.2957 11.4368 0 10.2068 0 7.96791C0 5.72891 1.3826 4.63051 3.9517 4.63051H5.9934V4.52131C5.9934 2.78751 5.3132 2.06271 3.7978 2.06271C3.0953 2.06271 2.41519 2.34821 1.86539 2.76521C1.60229 2.96251 1.3603 2.94141 1.1629 2.65601L0.569702 1.73382C0.393402 1.47071 0.415802 1.22869 0.678902 1.03135C1.6668 0.32889 2.7429 0 4.0163 0C6.8262 0 8.385 1.47071 8.385 4.34761L8.3862 4.34511ZM5.9934 7.06811V6.40901H4.2806C3.0954 6.40901 2.3929 6.93651 2.3929 7.90211C2.3929 8.86771 3.0072 9.37281 4.0833 9.37281C5.4001 9.37281 5.9934 8.62691 5.9934 7.06811Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 86.20px; top: 3.91px; position: absolute">
+          <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.0363 0C8.3652 0 8.5414 0.17624 8.5414 0.50513V11.4603C8.5414 14.1386 7.026 15.6317 4.2819 15.6317C1.5378 15.6317 0 14.1386 0 11.4603V8.36504C0 5.6644 1.3616 4.19369 3.8426 4.19369C4.8081 4.19369 5.5764 4.47914 6.1039 5.05005H6.1473V0.50513C6.1473 0.17624 6.3236 0 6.6524 0H8.0351H8.0363ZM6.1486 8.54004C6.1486 7.02464 5.5119 6.25644 4.2819 6.25644C3.052 6.25644 2.3942 7.00234 2.3942 8.54004V11.263C2.3942 12.8218 3.0085 13.5677 4.2819 13.5677C5.5553 13.5677 6.1486 12.8218 6.1486 11.263V8.54004Z" fill="white"/>
+          </svg>
+        </div>
+        <div data-svg-wrapper style="left: 0px; top: 0px; position: absolute">
+          <svg width="36" height="49" viewBox="0 0 36 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M35.4211 21.0901L18.076 1.56255L16.6438 0L15.2303 1.56007L0.613083 18.2939L0 18.9703L0.613083 19.5821L15.9985 34.9333L16.6414 35.575L17.2843 34.9346L29.9827 22.2815L30.6268 21.6386L29.9852 20.9933L17.3141 8.27195L16.6687 7.6241L16.0233 8.27071L6.00548 18.3249L5.3651 18.9678L6.00672 19.6107L16.0034 29.6276L16.6476 30.273L17.2917 29.6289L24.7703 22.1487L25.412 21.5058L24.7703 20.8617L17.2855 13.3493L16.6438 12.7052C16.5222 12.8318 11.3507 17.9687 11.0206 18.305L10.374 18.9492L11.0206 19.5945C11.3371 19.916 16.511 25.0653 16.6141 25.1758C17.0199 24.7774 19.7253 22.1326 20.197 21.6684L16.6265 22.6166L12.9517 18.9504L16.6389 15.2792L22.8405 21.5046L16.6488 27.6989L7.93657 18.9703C8.98154 17.9215 15.6174 11.2618 16.6687 10.2056L28.0529 21.6349L16.6414 33.0047L2.57767 18.9715L16.6376 5.70287L33.5744 21.8633L16.6302 46.2547L9.9384 42.7175L16.6302 49L35.5216 22.2555L35.9399 21.6573L35.4198 21.0901H35.4211Z" fill="white"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links nav-actions">☰</button>
+  <div id="nav-links" class="nav-links" style="justify-content: flex-start; align-items: center; gap: 40px; display: flex">
+    <div style="height: 24px; justify-content: center; align-items: center; gap: 10px; display: flex">
+      <div style="color: #EEEEEE; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Home</div>
+    </div>
+    <div style="height: 24px; border-bottom: 1px white solid; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+      <div style="color: white; font-size: 16px; font-family: Inter; font-weight: 700; line-height: 22.40px; word-wrap: break-word">Product</div>
+      <div data-svg-wrapper data-style="Filled" style="position: relative">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.41 8.29492L12 12.8749L16.59 8.29492L18 9.70492L12 15.7049L6 9.70492L7.41 8.29492Z" fill="#EEEEEE"/>
+        </svg>
+      </div>
+    </div>
+    <div style="height: 24px; justify-content: center; align-items: center; gap: 10px; display: flex">
+      <div style="color: #EEEEEE; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">About Nomadspoon</div>
+    </div>
+    <div style="height: 24px; justify-content: center; align-items: center; gap: 10px; display: flex">
+      <div style="color: #EEEEEE; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Community</div>
+    </div>
+    <div style="height: 24px; justify-content: center; align-items: center; gap: 10px; display: flex">
+      <div style="color: #EEEEEE; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Contact Us</div>
+    </div>
+  </div>
+  <div id="nav-actions" class="nav-actions" style="justify-content: flex-start; align-items: center; gap: 24px; display: flex">
+    <div data-svg-wrapper data-style="Filled" style="position: relative">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+      </svg>
+    </div>
+    <div data-svg-wrapper data-style="Filled" style="position: relative">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21.1752L10.55 19.8552C5.4 15.1852 2 12.1052 2 8.3252C2 5.2452 4.42 2.8252 7.5 2.8252C9.24 2.8252 10.91 3.6352 12 4.9152C13.09 3.6352 14.76 2.8252 16.5 2.8252C19.58 2.8252 22 5.2452 22 8.3252C22 12.1052 18.6 15.1852 13.45 19.8652L12 21.1752Z" fill="white"/>
+      </svg>
+    </div>
+    <div data-svg-wrapper data-style="Filled" style="position: relative">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 18C6.9 18 6.01 18.9 6.01 20C6.01 21.1 6.9 22 8 22C9.1 22 10 21.1 10 20C10 18.9 9.1 18 8 18ZM2 2V4H4L7.6 11.59L6.25 14.04C6.09 14.32 6 14.65 6 15C6 16.1 6.9 17 8 17H20V15H8.42C8.28 15 8.17 14.89 8.17 14.75L8.2 14.63L9.1 13H16.55C17.3 13 17.96 12.59 18.3 11.97L21.88 5.48C21.96 5.34 22 5.17 22 5C22 4.45 21.55 4 21 4H6.21L5.27 2H2ZM18 18C16.9 18 16.01 18.9 16.01 20C16.01 21.1 16.9 22 18 22C19.1 22 20 21.1 20 20C20 18.9 19.1 18 18 18Z" fill="white"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div style="padding-top: 75px; background: white; overflow: hidden; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+  <div style="width: 1280px; padding-top: 160px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex">
+    <div style="align-self: stretch; padding-left: 100px; padding-right: 100px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: flex">
+      <div data-property-1="Underweight" style="align-self: stretch; padding: 40px; background: linear-gradient(0deg, rgba(0, 166, 170, 0.05) 0%, rgba(0, 166, 170, 0.05) 100%), white; border-radius: 10px; outline: 2px #E0E0E0 solid; outline-offset: -2px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 28px; display: flex">
+          <div style="padding-left: 284px; padding-right: 284px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="text-align: center; color: #212121; font-size: 19px; font-family: Inter; font-weight: 400; line-height: 26.60px; word-wrap: break-word">Your BMI Result</div>
+          </div>
+          <div style="justify-content: flex-start; align-items: center; gap: 40px; display: inline-flex">
+            <div style="width: 128px; height: 128px; padding-left: 18px; padding-right: 18px; padding-top: 40px; padding-bottom: 40px; background: rgba(0, 166, 170, 0.15); border-radius: 500px; outline: 4px #00A6AA solid; outline-offset: -4px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+              <div style="text-align: center; color: #212121; font-size: 40px; font-family: Inter; font-weight: 500; line-height: 48px; word-wrap: break-word">17</div>
+            </div>
+            <div style="padding-left: 28px; padding-right: 28px; padding-top: 12px; padding-bottom: 12px; background: linear-gradient(0deg, rgba(0, 166, 170, 0.10) 0%, rgba(0, 166, 170, 0.10) 100%), white; border-radius: 20px; outline: 2px #00A6AA solid; outline-offset: -2px; justify-content: center; align-items: center; gap: 10px; display: flex">
+              <div style="text-align: center; color: #212121; font-size: 16px; font-family: Inter; font-weight: 500; line-height: 22.40px; word-wrap: break-word">Under Weight</div>
+            </div>
+          </div>
+          <div style="align-self: stretch; padding-left: 1px; padding-right: 1px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="flex: 1 1 0; text-align: center; color: #616161; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 25.60px; word-wrap: break-word">Based on your BMI, we recommend nutrient-dense meals with increased calorie intake.<br/>Our meal selection below supports healthy weight gain by providing balanced nutrition, sustained energy, and recovery support for your trekking adventures.</div>
+          </div>
+          <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="width: 400px; height: 44px; padding: 10px; background: #546D46; border-radius: 8px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Recalculate BMI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="align-self: stretch; padding-left: 80px; padding-right: 80px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
+      <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="text-align: center; color: black; font-size: 33px; font-family: Inter; font-weight: 500; line-height: 39.60px; word-wrap: break-word">Our Suggestions for you</div>
+      </div>
+      <div style="align-self: stretch; justify-content: center; align-items: center; gap: 20px; display: inline-flex">
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_2882" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_2882)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Salted Cheese Trail Mix</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">150g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹250.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_2919" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_2919)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Berry Nut Energy Bar</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">50g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹270.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_4370" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_4370)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Mango Chilli Energy Bar</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">50g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹70.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="align-self: stretch; padding-left: 80px; padding-right: 80px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 28px; display: flex">
+      <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="text-align: center; color: black; font-size: 33px; font-family: Inter; font-weight: 500; line-height: 39.60px; word-wrap: break-word">You can also try them</div>
+      </div>
+      <div style="align-self: stretch; justify-content: center; align-items: center; gap: 20px; display: inline-flex">
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_4339" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_4339)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Berry Nut Energy Bar</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">50g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹270.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_4396" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_4396)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Moong Dal Khichdi Meal</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">75g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹150.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-property-1="Add-to-bundle" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; height: 253px; position: relative; background: #F4F4F4; overflow: hidden; border-radius: 8px; background-image: url(https://placehold.co/360x253)">
+            <div style="padding: 8px; left: 10px; top: 211px; position: absolute; background: white; border-radius: 6px; justify-content: flex-start; align-items: center; gap: 6px; display: inline-flex">
+              <div style="justify-content: flex-start; align-items: center; gap: 4px; display: flex">
+                <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">4.2</div>
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.72283 1.33901C6.74839 1.28737 6.78788 1.24389 6.83684 1.21349C6.8858 1.1831 6.94228 1.16699 6.99991 1.16699C7.05754 1.16699 7.11402 1.1831 7.16298 1.21349C7.21194 1.24389 7.25143 1.28737 7.27699 1.33901L8.62449 4.06843C8.71326 4.24808 8.8443 4.4035 9.00636 4.52136C9.16842 4.63922 9.35665 4.716 9.55491 4.7451L12.5684 5.1861C12.6255 5.19437 12.6792 5.21846 12.7233 5.25563C12.7674 5.2928 12.8002 5.34158 12.8181 5.39645C12.8359 5.45132 12.8381 5.51008 12.8243 5.5661C12.8104 5.62212 12.7812 5.67315 12.7399 5.71343L10.5606 7.8356C10.4169 7.97566 10.3093 8.14854 10.2472 8.33938C10.1851 8.53022 10.1704 8.73328 10.2042 8.9311L10.7187 11.9294C10.7287 11.9865 10.7226 12.0453 10.7009 12.099C10.6792 12.1527 10.6428 12.1993 10.5959 12.2333C10.549 12.2674 10.4935 12.2876 10.4357 12.2916C10.3778 12.2956 10.3201 12.2833 10.2689 12.2561L7.57508 10.8398C7.39758 10.7466 7.2001 10.6979 6.99962 10.6979C6.79914 10.6979 6.60166 10.7466 6.42416 10.8398L3.73091 12.2561C3.67977 12.2832 3.62206 12.2953 3.56434 12.2912C3.50662 12.2871 3.45121 12.2669 3.40442 12.2329C3.35762 12.1989 3.32131 12.1524 3.29963 12.0987C3.27794 12.0451 3.27174 11.9864 3.28174 11.9294L3.79566 8.93168C3.82961 8.73377 3.8149 8.53058 3.75281 8.33962C3.69071 8.14867 3.5831 7.97569 3.43924 7.8356L1.25991 5.71401C1.21826 5.67378 1.18874 5.62266 1.17472 5.56647C1.1607 5.51029 1.16275 5.45129 1.18062 5.39621C1.1985 5.34113 1.23148 5.29217 1.27582 5.25492C1.32016 5.21767 1.37407 5.19362 1.43141 5.18551L4.44433 4.7451C4.64281 4.71622 4.8313 4.63955 4.99358 4.52167C5.15586 4.4038 5.28707 4.24825 5.37591 4.06843L6.72283 1.33901Z" fill="black" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="width: 12.04px; height: 0px; transform: rotate(-90deg); transform-origin: top left; outline: 1px #616161 solid; outline-offset: -0.50px"></div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">212</div>
+            </div>
+            <div style="width: 40px; height: 40px; left: 311px; top: 8.60px; position: absolute; background: white; box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px rgba(0, 0, 0, 0.10); border-radius: 26843500px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+              <div data-svg-wrapper data-property-1="False" style="position: relative">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_2001_4214" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                <rect width="24" height="24" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_2001_4214)">
+                <path d="M12 21.0004L10.55 19.7004C8.86667 18.1837 7.475 16.8754 6.375 15.7754C5.275 14.6754 4.4 13.6879 3.75 12.8129C3.1 11.9379 2.64583 11.1337 2.3875 10.4004C2.12917 9.66706 2 8.91706 2 8.15039C2 6.58372 2.525 5.27539 3.575 4.22539C4.625 3.17539 5.93333 2.65039 7.5 2.65039C8.36667 2.65039 9.19167 2.83372 9.975 3.20039C10.7583 3.56706 11.4333 4.08372 12 4.75039C12.5667 4.08372 13.2417 3.56706 14.025 3.20039C14.8083 2.83372 15.6333 2.65039 16.5 2.65039C18.0667 2.65039 19.375 3.17539 20.425 4.22539C21.475 5.27539 22 6.58372 22 8.15039C22 8.91706 21.8708 9.66706 21.6125 10.4004C21.3542 11.1337 20.9 11.9379 20.25 12.8129C19.6 13.6879 18.725 14.6754 17.625 15.7754C16.525 16.8754 15.1333 18.1837 13.45 19.7004L12 21.0004ZM12 18.3004C13.6 16.8671 14.9167 15.6379 15.95 14.6129C16.9833 13.5879 17.8 12.6962 18.4 11.9379C19 11.1796 19.4167 10.5046 19.65 9.91289C19.8833 9.32122 20 8.73372 20 8.15039C20 7.15039 19.6667 6.31706 19 5.65039C18.3333 4.98372 17.5 4.65039 16.5 4.65039C15.7167 4.65039 14.9917 4.87122 14.325 5.31289C13.6583 5.75456 13.2 6.31706 12.95 7.00039H11.05C10.8 6.31706 10.3417 5.75456 9.675 5.31289C9.00833 4.87122 8.28333 4.65039 7.5 4.65039C6.5 4.65039 5.66667 4.98372 5 5.65039C4.33333 6.31706 4 7.15039 4 8.15039C4 8.73372 4.11667 9.32122 4.35 9.91289C4.58333 10.5046 5 11.1796 5.6 11.9379C6.2 12.6962 7.01667 13.5879 8.05 14.6129C9.08333 15.6379 10.4 16.8671 12 18.3004Z" fill="#757575"/>
+                </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+            <div style="flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; display: flex">
+              <div style="color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Mango Chilli Energy Bar</div>
+              <div style="color: #616161; font-size: 13px; font-family: Inter; font-weight: 500; line-height: 15.60px; word-wrap: break-word">50g</div>
+            </div>
+            <div style="color: black; font-size: 19px; font-family: Inter; font-weight: 600; line-height: 26.60px; word-wrap: break-word">₹70.00</div>
+            <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: flex">
+              <div data-left-icon="false" data-property-1="Filled" data-right-icon="false" data-show-text="true" style="align-self: stretch; height: 44px; padding: 10px; background: #415436; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 22.40px; word-wrap: break-word">Add to Cart</div>
+              </div>
+              <div style="align-self: stretch; height: 44px; padding: 10px; border-radius: 8px; justify-content: center; align-items: center; gap: 24px; display: inline-flex">
+                <div style="text-align: center; color: #616161; font-size: 13px; font-family: Inter; font-weight: 600; line-height: 15.60px; word-wrap: break-word">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="align-self: stretch; padding-top: 40px; padding-bottom: 60px; padding-left: 80px; padding-right: 80px; background: #212121; flex-direction: column; justify-content: center; align-items: center; gap: 40px; display: flex">
+      <div style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 120px; display: inline-flex">
+        <div style="width: 320px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+          <div style="color: white; font-size: 19px; font-family: Inter; font-weight: 400; line-height: 26.60px; word-wrap: break-word">Nomad Spoon</div>
+          <div style="align-self: stretch; color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Giving you the right nutrition for your trek with a weight you can carry easily.<br/>Go Light. Eat Right. </div>
+          <div style="align-self: stretch; height: 20px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+            <div style="width: 20px; height: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+              <div data-svg-wrapper style="position: relative">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.0002 1.66699H12.5002C11.3951 1.66699 10.3353 2.10598 9.55388 2.88738C8.77248 3.66878 8.3335 4.72859 8.3335 5.83366V8.33366H5.8335V11.667H8.3335V18.3337H11.6668V11.667H14.1668L15.0002 8.33366H11.6668V5.83366C11.6668 5.61265 11.7546 5.40068 11.9109 5.2444C12.0672 5.08812 12.2791 5.00033 12.5002 5.00033H15.0002V1.66699Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div style="width: 20px; height: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+              <div data-svg-wrapper style="position: relative">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.3332 3.33368C18.3332 3.33368 17.7498 5.08368 16.6665 6.16701C17.9998 14.5003 8.83317 20.5837 1.6665 15.8337C3.49984 15.917 5.33317 15.3337 6.6665 14.167C2.49984 12.917 0.416504 8.00034 2.49984 4.16701C4.33317 6.33368 7.1665 7.58368 9.99984 7.50034C9.24984 4.00034 13.3332 2.00034 15.8332 4.33368C16.7498 4.33368 18.3332 3.33368 18.3332 3.33368Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div style="width: 20px; height: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+              <div data-svg-wrapper style="position: relative">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_2001_4429)">
+                <path d="M14.1665 1.66699H5.83317C3.53198 1.66699 1.6665 3.53247 1.6665 5.83366V14.167C1.6665 16.4682 3.53198 18.3337 5.83317 18.3337H14.1665C16.4677 18.3337 18.3332 16.4682 18.3332 14.167V5.83366C18.3332 3.53247 16.4677 1.66699 14.1665 1.66699Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.3333 9.47525C13.4361 10.1688 13.3176 10.8771 12.9947 11.4994C12.6718 12.1218 12.1609 12.6264 11.5346 12.9416C10.9083 13.2569 10.1986 13.3666 9.50641 13.2552C8.81419 13.1438 8.17472 12.817 7.67895 12.3212C7.18318 11.8255 6.85636 11.186 6.74497 10.4938C6.63359 9.80154 6.74331 9.09183 7.05852 8.46556C7.37374 7.8393 7.87841 7.32837 8.50074 7.00545C9.12307 6.68254 9.83138 6.56407 10.5249 6.66692C11.2324 6.77182 11.8873 7.10147 12.393 7.60717C12.8987 8.11288 13.2283 8.76782 13.3333 9.47525Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14.5835 5.41699H14.5918" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                <clipPath id="clip0_2001_4429">
+                <rect width="20" height="20" fill="white"/>
+                </clipPath>
+                </defs>
+                </svg>
+              </div>
+            </div>
+            <div style="width: 20px; height: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+              <div data-svg-wrapper style="position: relative">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3335 6.66699C14.6596 6.66699 15.9313 7.19378 16.869 8.13146C17.8067 9.06914 18.3335 10.3409 18.3335 11.667V17.5003H15.0002V11.667C15.0002 11.225 14.8246 10.801 14.512 10.4885C14.1994 10.1759 13.7755 10.0003 13.3335 10.0003C12.8915 10.0003 12.4675 10.1759 12.155 10.4885C11.8424 10.801 11.6668 11.225 11.6668 11.667V17.5003H8.3335V11.667C8.3335 10.3409 8.86028 9.06914 9.79796 8.13146C10.7356 7.19378 12.0074 6.66699 13.3335 6.66699Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4.99984 7.5H1.6665V17.5H4.99984V7.5Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3.33317 5.00033C4.25365 5.00033 4.99984 4.25413 4.99984 3.33366C4.99984 2.41318 4.25365 1.66699 3.33317 1.66699C2.4127 1.66699 1.6665 2.41318 1.6665 3.33366C1.6665 4.25413 2.4127 5.00033 3.33317 5.00033Z" stroke="#E0E0E0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex: 1 1 0; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
+          <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+            <div style="color: white; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Quick Links</div>
+            <div style="align-self: stretch; height: 104px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Home</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Shop</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">About Nomadspoon</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Career</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Contact</div>
+            </div>
+          </div>
+          <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+            <div style="color: white; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Support</div>
+            <div style="align-self: stretch; height: 104px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">FAQs</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Business Enquires</div>
+              <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Privacy Policy</div>
+            </div>
+          </div>
+          <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+            <div style="color: white; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 22.40px; word-wrap: break-word">Contact Us</div>
+            <div style="height: 84px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
+              <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_2001_4457)">
+                  <path d="M8.00016 1.33301C5.42016 1.33301 3.3335 3.41967 3.3335 5.99967C3.3335 9.49967 8.00016 14.6663 8.00016 14.6663C8.00016 14.6663 12.6668 9.49967 12.6668 5.99967C12.6668 3.41967 10.5802 1.33301 8.00016 1.33301ZM4.66683 5.99967C4.66683 4.15967 6.16016 2.66634 8.00016 2.66634C9.84016 2.66634 11.3335 4.15967 11.3335 5.99967C11.3335 7.91967 9.4135 10.793 8.00016 12.5863C6.6135 10.8063 4.66683 7.89967 4.66683 5.99967Z" fill="#E0E0E0"/>
+                  <path d="M8.00016 7.66634C8.92064 7.66634 9.66683 6.92015 9.66683 5.99967C9.66683 5.0792 8.92064 4.33301 8.00016 4.33301C7.07969 4.33301 6.3335 5.0792 6.3335 5.99967C6.3335 6.92015 7.07969 7.66634 8.00016 7.66634Z" fill="#E0E0E0"/>
+                  </g>
+                  <defs>
+                  <clipPath id="clip0_2001_4457">
+                  <rect width="16" height="16" fill="white"/>
+                  </clipPath>
+                  </defs>
+                  </svg>
+                </div>
+                <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">Pune,India</div>
+              </div>
+              <div style="align-self: stretch; height: 20px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_2001_4463)">
+                  <path d="M4.36 3.33333C4.4 3.92667 4.5 4.50667 4.66 5.06L3.86 5.86C3.58667 5.06 3.41333 4.21333 3.35333 3.33333H4.36ZM10.9333 11.3467C11.5 11.5067 12.08 11.6067 12.6667 11.6467V12.64C11.7867 12.58 10.94 12.4067 10.1333 12.14L10.9333 11.3467ZM5 2H2.66667C2.3 2 2 2.3 2 2.66667C2 8.92667 7.07333 14 13.3333 14C13.7 14 14 13.7 14 13.3333V11.0067C14 10.64 13.7 10.34 13.3333 10.34C12.5067 10.34 11.7 10.2067 10.9533 9.96C10.8867 9.93333 10.8133 9.92667 10.7467 9.92667C10.5733 9.92667 10.4067 9.99333 10.2733 10.12L8.80667 11.5867C6.92 10.62 5.37333 9.08 4.41333 7.19333L5.88 5.72667C6.06667 5.54 6.12 5.28 6.04667 5.04667C5.8 4.3 5.66667 3.5 5.66667 2.66667C5.66667 2.3 5.36667 2 5 2Z" fill="#E0E0E0"/>
+                  </g>
+                  <defs>
+                  <clipPath id="clip0_2001_4463">
+                  <rect width="16" height="16" fill="white"/>
+                  </clipPath>
+                  </defs>
+                  </svg>
+                </div>
+                <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">+91 9658233625</div>
+              </div>
+              <div style="align-self: stretch; height: 20px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                <div data-svg-wrapper style="position: relative">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_2001_4468)">
+                  <path d="M13.3335 2.66699H2.66683C1.9335 2.66699 1.34016 3.26699 1.34016 4.00033L1.3335 12.0003C1.3335 12.7337 1.9335 13.3337 2.66683 13.3337H13.3335C14.0668 13.3337 14.6668 12.7337 14.6668 12.0003V4.00033C14.6668 3.26699 14.0668 2.66699 13.3335 2.66699ZM13.3335 12.0003H2.66683V5.33366L8.00016 8.66699L13.3335 5.33366V12.0003ZM8.00016 7.33366L2.66683 4.00033H13.3335L8.00016 7.33366Z" fill="#E0E0E0"/>
+                  </g>
+                  <defs>
+                  <clipPath id="clip0_2001_4468">
+                  <rect width="16" height="16" fill="white"/>
+                  </clipPath>
+                  </defs>
+                  </svg>
+                </div>
+                <div style="color: #E0E0E0; font-size: 13px; font-family: Inter; font-weight: 400; line-height: 15.60px; word-wrap: break-word">hello@company.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="align-self: stretch; padding-top: 40px; border-top: 0.80px #424242 solid; flex-direction: column; justify-content: flex-end; align-items: center; display: flex">
+        <div style="text-align: center; color: #EEEEEE; font-size: 14px; font-family: Arial; font-weight: 400; line-height: 20px; word-wrap: break-word">© 2026 Your Company. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
