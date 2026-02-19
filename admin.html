@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nomad Spoon Admin</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f6f7f9; color: #1f2937; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1, h2 { margin: 0 0 12px; }
+    .card { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .grid .full { grid-column: 1 / -1; }
+    input, textarea, select, button { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    textarea { min-height: 80px; resize: vertical; }
+    button { cursor: pointer; background: #546D46; color: white; border: 0; }
+    .btn-secondary { background: #374151; }
+    .row { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    th, td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 8px; vertical-align: top; }
+    .actions { display: flex; gap: 6px; }
+    .actions button { width: auto; padding: 6px 10px; }
+    .msg { margin-top: 8px; color: #065f46; }
+    .err { margin-top: 8px; color: #991b1b; }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Nomad Spoon Admin Panel</h1>
+
+    <section class="card">
+      <h2>Products</h2>
+      <form id="product-form" class="grid">
+        <input name="id" placeholder="id (for update)" />
+        <input name="slug" placeholder="slug" required />
+        <input name="name" placeholder="name" required />
+        <input name="weight_g" placeholder="weight_g" type="number" required />
+        <input name="price" placeholder="price" type="number" step="0.01" required />
+        <input name="mrp" placeholder="mrp" type="number" step="0.01" required />
+        <input name="rating" placeholder="rating" type="number" step="0.1" required />
+        <input name="review_count" placeholder="review_count" type="number" required />
+        <input class="full" name="value_proposition" placeholder="value_proposition" required />
+        <select name="category_tag" required>
+          <option value="maintain">maintain</option>
+          <option value="gain">gain</option>
+          <option value="loss">loss</option>
+        </select>
+        <input name="image_url" placeholder="image_url" />
+        <textarea class="full" name="description" placeholder="description" required></textarea>
+        <div class="row full">
+          <button type="button" id="create-product">Create product</button>
+          <button type="button" id="update-product" class="btn-secondary">Update product by id</button>
+        </div>
+      </form>
+      <div id="product-message"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Slug</th><th>Name</th><th>Price</th><th>Category</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="products-body"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Reviews</h2>
+      <form id="review-form" class="grid">
+        <input name="id" placeholder="id (for update)" />
+        <input name="product_id" placeholder="product_id" type="number" required />
+        <input name="user_name" placeholder="user_name" required />
+        <input name="rating" placeholder="rating" type="number" step="0.1" required />
+        <textarea class="full" name="review_text" placeholder="review_text" required></textarea>
+        <div class="row full">
+          <button type="button" id="create-review">Create review</button>
+          <button type="button" id="update-review" class="btn-secondary">Update review by id</button>
+        </div>
+      </form>
+      <div id="review-message"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Product</th><th>User</th><th>Rating</th><th>Review</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reviews-body"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const api = {
+      products: 'api/admin/products.php',
+      reviews: 'api/admin/reviews.php'
+    };
+
+    async function req(url, opts = {}) {
+      const r = await fetch(url, {
+        headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+        ...opts
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Request failed');
+      return d;
+    }
+
+    const el = (id) => document.getElementById(id);
+
+    function msg(node, text, isErr = false) {
+      node.className = isErr ? 'err' : 'msg';
+      node.textContent = text;
+    }
+
+    function formDataObj(form) {
+      const data = Object.fromEntries(new FormData(form).entries());
+      Object.keys(data).forEach((k) => {
+        if (data[k] === '') delete data[k];
+      });
+      return data;
+    }
+
+    async function loadProducts() {
+      const data = await req(api.products);
+      const body = el('products-body');
+      body.innerHTML = '';
+      for (const p of data.products || []) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.id}</td>
+          <td>${p.slug}</td>
+          <td>${p.name}</td>
+          <td>₹${p.price}</td>
+          <td>${p.category_tag}</td>
+          <td class="actions">
+            <button data-edit="${p.id}">Edit</button>
+            <button data-del="${p.id}">Delete</button>
+          </td>
+        `;
+        body.appendChild(tr);
+      }
+
+      body.querySelectorAll('[data-del]').forEach((btn) => {
+        btn.onclick = async () => {
+          try {
+            await req(`${api.products}?id=${btn.dataset.del}`, { method: 'DELETE' });
+            await loadProducts();
+          } catch (e) {
+            msg(el('product-message'), e.message, true);
+          }
+        };
+      });
+
+      body.querySelectorAll('[data-edit]').forEach((btn) => {
+        btn.onclick = async () => {
+          try {
+            const { product } = await req(`${api.products}?id=${btn.dataset.edit}`);
+            const f = el('product-form');
+            Object.keys(product).forEach((k) => {
+              const input = f.querySelector(`[name="${k}"]`);
+              if (input) input.value = product[k] ?? '';
+            });
+          } catch (e) {
+            msg(el('product-message'), e.message, true);
+          }
+        };
+      });
+    }
+
+    async function loadReviews() {
+      const data = await req(api.reviews);
+      const body = el('reviews-body');
+      body.innerHTML = '';
+      for (const r of data.reviews || []) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${r.id}</td>
+          <td>${r.product_name} (#${r.product_id})</td>
+          <td>${r.user_name}</td>
+          <td>${r.rating}</td>
+          <td>${r.review_text}</td>
+          <td class="actions">
+            <button data-edit="${r.id}">Edit</button>
+            <button data-del="${r.id}">Delete</button>
+          </td>
+        `;
+        body.appendChild(tr);
+      }
+
+      body.querySelectorAll('[data-del]').forEach((btn) => {
+        btn.onclick = async () => {
+          try {
+            await req(`${api.reviews}?id=${btn.dataset.del}`, { method: 'DELETE' });
+            await loadReviews();
+          } catch (e) {
+            msg(el('review-message'), e.message, true);
+          }
+        };
+      });
+
+      body.querySelectorAll('[data-edit]').forEach((btn) => {
+        btn.onclick = async () => {
+          try {
+            const { review } = await req(`${api.reviews}?id=${btn.dataset.edit}`);
+            const f = el('review-form');
+            ['id', 'product_id', 'user_name', 'rating', 'review_text'].forEach((k) => {
+              const input = f.querySelector(`[name="${k}"]`);
+              if (input) input.value = review[k] ?? '';
+            });
+          } catch (e) {
+            msg(el('review-message'), e.message, true);
+          }
+        };
+      });
+    }
+
+    el('create-product').onclick = async () => {
+      try {
+        const payload = formDataObj(el('product-form'));
+        delete payload.id;
+        await req(api.products, { method: 'POST', body: JSON.stringify(payload) });
+        msg(el('product-message'), 'Product created');
+        await loadProducts();
+      } catch (e) {
+        msg(el('product-message'), e.message, true);
+      }
+    };
+
+    el('update-product').onclick = async () => {
+      try {
+        const payload = formDataObj(el('product-form'));
+        const id = payload.id;
+        if (!id) throw new Error('id is required for update');
+        delete payload.id;
+        await req(`${api.products}?id=${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+        msg(el('product-message'), 'Product updated');
+        await loadProducts();
+      } catch (e) {
+        msg(el('product-message'), e.message, true);
+      }
+    };
+
+    el('create-review').onclick = async () => {
+      try {
+        const payload = formDataObj(el('review-form'));
+        delete payload.id;
+        await req(api.reviews, { method: 'POST', body: JSON.stringify(payload) });
+        msg(el('review-message'), 'Review created');
+        await loadReviews();
+      } catch (e) {
+        msg(el('review-message'), e.message, true);
+      }
+    };
+
+    el('update-review').onclick = async () => {
+      try {
+        const payload = formDataObj(el('review-form'));
+        const id = payload.id;
+        if (!id) throw new Error('id is required for update');
+        delete payload.id;
+        await req(`${api.reviews}?id=${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+        msg(el('review-message'), 'Review updated');
+        await loadReviews();
+      } catch (e) {
+        msg(el('review-message'), e.message, true);
+      }
+    };
+
+    (async () => {
+      try {
+        await loadProducts();
+        await loadReviews();
+      } catch (e) {
+        msg(el('product-message'), e.message, true);
+      }
+    })();
+  </script>
+</body>
+</html>

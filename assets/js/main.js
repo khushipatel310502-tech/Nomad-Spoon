@@ -1,5 +1,6 @@
 (function () {
   const page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  const API_BASE = 'api';
 
   const pxFromStyle = (styleText, prop) => {
     if (!styleText) return null;
@@ -22,6 +23,45 @@
     return Number.isFinite(v) ? v : fallback;
   };
 
+  const slugify = (value) => String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const apiRequest = async (path, options = {}) => {
+    const response = await fetch(`${API_BASE}/${path}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      },
+      ...options
+    });
+
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      const message = payload && payload.error ? payload.error : 'Request failed';
+      throw new Error(message);
+    }
+    return payload;
+  };
+
+  const leafNodes = (root = document) => Array.from(root.querySelectorAll('div, span, a')).filter((n) => n.childElementCount === 0);
+
+  const setLeafTextByExact = (oldText, newText, occurrence = 0, root = document) => {
+    const nodes = leafNodes(root).filter((n) => (n.textContent || '').trim() === oldText);
+    const target = nodes[occurrence];
+    if (target) target.textContent = newText;
+    return Boolean(target);
+  };
+
+  const setLeafTextByContains = (match, newText, occurrence = 0, root = document) => {
+    const nodes = leafNodes(root).filter((n) => (n.textContent || '').includes(match));
+    const target = nodes[occurrence];
+    if (target) target.textContent = newText;
+    return Boolean(target);
+  };
+
   const showToast = (message) => {
     let toast = document.getElementById('app-toast');
     if (!toast) {
@@ -41,6 +81,76 @@
     const count = Number(localStorage.getItem(key) || '0') + 1;
     localStorage.setItem(key, String(count));
     showToast(`Added to cart (${count})`);
+  };
+
+  let productCatalogPromise = null;
+
+  const getProductCatalog = async () => {
+    if (!productCatalogPromise) {
+      productCatalogPromise = apiRequest('product.php?all=1', { method: 'GET' })
+        .then((data) => (Array.isArray(data.products) ? data.products : []))
+        .catch(() => []);
+    }
+    return productCatalogPromise;
+  };
+
+  const looksLikeProductCard = (node) => {
+    if (!node || node.nodeType !== 1) return false;
+    const text = (node.textContent || '').trim();
+    if (!text.includes('Add to Cart') || !text.includes('View Details')) return false;
+    return true;
+  };
+
+  const findProductCard = (fromNode) => {
+    let node = fromNode;
+    while (node && node !== document.body) {
+      if (node.dataset && node.dataset.productSlug) return node;
+      if (looksLikeProductCard(node)) return node;
+      node = node.parentElement;
+    }
+    return null;
+  };
+
+  const extractCardProductName = (card) => {
+    if (!card) return '';
+    const textNodes = leafNodes(card);
+    const nameNode = textNodes.find((n) => {
+      const text = (n.textContent || '').trim();
+      return text
+        && !text.startsWith('₹')
+        && !/\d+g$/i.test(text)
+        && !/^\d+(\.\d+)?$/.test(text)
+        && text !== 'Add to Cart'
+        && text !== 'View Details';
+    });
+    return (nameNode && nameNode.textContent ? nameNode.textContent : '').trim();
+  };
+
+  const resolveCardSlug = async (card) => {
+    if (!card) return '';
+    if (card.dataset && card.dataset.productSlug) return card.dataset.productSlug;
+
+    const name = extractCardProductName(card);
+    const guessed = slugify(name);
+
+    const products = await getProductCatalog();
+    if (!products.length) return guessed;
+
+    const byExactName = products.find((p) => String(p.name || '').trim().toLowerCase() === name.toLowerCase());
+    if (byExactName && byExactName.slug) {
+      card.dataset.productSlug = byExactName.slug;
+      return byExactName.slug;
+    }
+
+    const bySlugGuess = products.find((p) => String(p.slug || '').toLowerCase() === guessed);
+    if (bySlugGuess && bySlugGuess.slug) {
+      card.dataset.productSlug = bySlugGuess.slug;
+      return bySlugGuess.slug;
+    }
+
+    const fallback = products[0] && products[0].slug ? String(products[0].slug) : guessed;
+    if (fallback) card.dataset.productSlug = fallback;
+    return fallback;
   };
 
   const applyResponsiveAbsoluteImages = () => {
@@ -121,8 +231,7 @@
       ['Product', 'product.html'],
       ['Shop', 'product.html'],
       ['Calculate', 'BMI.html'],
-      ['Recalculate BMI', 'main.html'],
-      ['View Details', 'product.html']
+      ['Recalculate BMI', 'main.html']
     ]);
 
     const nodes = document.querySelectorAll('#app div, #app span');
@@ -162,8 +271,10 @@
       }
 
       if (label === 'View Details' && el.dataset.actionBound !== 'true') {
-        el.addEventListener('click', () => {
-          window.location.href = 'product.html';
+        el.addEventListener('click', async () => {
+          const card = findProductCard(el);
+          const slug = await resolveCardSlug(card);
+          window.location.href = slug ? `product.html?slug=${encodeURIComponent(slug)}` : 'product.html';
         });
         el.dataset.actionBound = 'true';
       }
@@ -359,20 +470,40 @@
 
     const calcLink = document.querySelector('a[href="BMI.html"]');
     if (!calcLink || !ageNode || !heightNode || !weightNode) return;
-    calcLink.addEventListener('click', (e) => {
+    calcLink.addEventListener('click', async (e) => {
       e.preventDefault();
       const age = toNumber(ageNode.textContent, 23);
       const heightCm = toNumber(heightNode.textContent, 159);
       const weightKg = toNumber(weightNode.textContent, 55);
-      const bmi = weightKg / Math.pow(heightCm / 100, 2);
-      const rounded = Math.round(bmi * 10) / 10;
 
-      localStorage.setItem('nomad_last_bmi', String(rounded));
-      localStorage.setItem('nomad_last_age', String(age));
-      localStorage.setItem('nomad_last_height', String(heightCm));
-      localStorage.setItem('nomad_last_weight', String(weightKg));
+      const gender = localStorage.getItem('nomad_gender') || 'Female';
+      const unit = localStorage.getItem('nomad_unit') || 'Metric';
+      const exerciseIndex = Number(localStorage.getItem('nomad_exercise_index') || '2');
 
-      window.location.href = `BMI.html?bmi=${encodeURIComponent(String(rounded))}`;
+      try {
+        const result = await apiRequest('bmi.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            age,
+            height: heightCm,
+            weight: weightKg,
+            gender,
+            unit,
+            exerciseIndex
+          })
+        });
+
+        localStorage.setItem('nomad_last_bmi_result', JSON.stringify(result));
+        window.location.href = `BMI.html?bmi=${encodeURIComponent(String(result.bmi))}`;
+      } catch (err) {
+        const bmi = weightKg / Math.pow(heightCm / 100, 2);
+        const rounded = Math.round(bmi * 10) / 10;
+        localStorage.setItem('nomad_last_bmi', String(rounded));
+        localStorage.setItem('nomad_last_age', String(age));
+        localStorage.setItem('nomad_last_height', String(heightCm));
+        localStorage.setItem('nomad_last_weight', String(weightKg));
+        window.location.href = `BMI.html?bmi=${encodeURIComponent(String(rounded))}`;
+      }
     });
   };
 
@@ -413,6 +544,39 @@
 
   const initBMIResultHydration = () => {
     if (page !== 'bmi.html') return;
+
+    const backendResultRaw = localStorage.getItem('nomad_last_bmi_result');
+    if (backendResultRaw) {
+      try {
+        const backendResult = JSON.parse(backendResultRaw);
+        if (backendResult && Number.isFinite(Number(backendResult.bmi))) {
+          const scoreNode = byLeafText('17');
+          if (scoreNode) scoreNode.textContent = String(backendResult.bmi);
+
+          const statusNode = byLeafText('Under Weight');
+          const descNode = Array.from(document.querySelectorAll('#app div'))
+            .find((n) => n.childElementCount === 0 && (n.textContent || '').includes('Based on your BMI'));
+
+          if (statusNode) {
+            statusNode.textContent = backendResult.category || 'Normal';
+            const pill = statusNode.parentElement;
+            if (pill) {
+              pill.style.outlineColor = backendResult.color || '#2E7D32';
+              pill.style.background = backendResult.background || 'rgba(46, 125, 50, 0.15)';
+            }
+          }
+          if (descNode && backendResult.description) descNode.innerHTML = backendResult.description;
+
+          const scoreRing = scoreNode && scoreNode.parentElement;
+          if (scoreRing) {
+            scoreRing.style.outlineColor = backendResult.color || '#2E7D32';
+            scoreRing.style.background = backendResult.background || 'rgba(46, 125, 50, 0.15)';
+          }
+        }
+      } catch (_e) {
+        // ignore parse failure and continue with fallback calculation hydration.
+      }
+    }
 
     const params = new URLSearchParams(window.location.search);
     const parsed = Number(params.get('bmi') || localStorage.getItem('nomad_last_bmi') || '');
@@ -467,6 +631,93 @@
     if (scoreRing) {
       scoreRing.style.outlineColor = color;
       scoreRing.style.background = bg;
+    }
+  };
+
+  const hydrateProductCards = (headingText, products) => {
+    const heading = byLeafText(headingText);
+    if (!heading || !Array.isArray(products) || products.length === 0) return;
+
+    const section = heading.closest('div[style*="flex-direction: column"]');
+    if (!section) return;
+
+    let cards = Array.from(section.querySelectorAll('div[data-property-1="Add-to-bundle"]'));
+    if (!cards.length) {
+      cards = Array.from(section.querySelectorAll('div[style*="width: 265px"]'))
+        .filter((card) => (card.textContent || '').includes('Add to Cart'));
+    }
+    cards.forEach((card, idx) => {
+      const product = products[idx % products.length];
+      if (!product) return;
+      card.dataset.productSlug = product.slug;
+
+      const textNodes = leafNodes(card);
+      const nameNode = textNodes.find((n) => {
+        const text = (n.textContent || '').trim();
+        return text && !text.startsWith('₹') && !text.endsWith('g') && text !== 'Add to Cart' && text !== 'View Details' && text !== '212' && text !== '4.2';
+      });
+      const weightNode = textNodes.find((n) => /\d+g$/i.test((n.textContent || '').trim()));
+      const priceNode = textNodes.find((n) => /^₹/.test((n.textContent || '').trim()));
+      const viewDetailsNode = textNodes.find((n) => (n.textContent || '').trim() === 'View Details');
+
+      if (nameNode) nameNode.textContent = product.name;
+      if (weightNode) weightNode.textContent = `${product.weight_g}g`;
+      if (priceNode) priceNode.textContent = `₹${Number(product.price).toFixed(2)}`;
+      if (viewDetailsNode) {
+        viewDetailsNode.dataset.productSlug = product.slug;
+        if (viewDetailsNode.parentElement) viewDetailsNode.parentElement.dataset.productSlug = product.slug;
+      }
+    });
+  };
+
+  const hydrateMainBestsellersFromBackend = async () => {
+    try {
+      const data = await apiRequest('product.php?all=1', { method: 'GET' });
+      const products = Array.isArray(data.products) ? data.products : [];
+      if (!products.length) return;
+
+      hydrateProductCards('Discover our bestsellers', products);
+    } catch (_err) {
+      // Keep static cards if backend call fails.
+    }
+  };
+
+  const initBackendDataHydration = async () => {
+    if (page !== 'product.html' && page !== 'bmi.html') return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug') || 'berry-nut-energy-bar';
+      const data = await apiRequest(`product.php?slug=${encodeURIComponent(slug)}`, { method: 'GET' });
+      const product = data && data.product;
+      if (!product) return;
+
+      if (page === 'product.html') {
+        setLeafTextByExact('Berry Nut Energy Bar', product.name, 0);
+        setLeafTextByContains('A potent, science-backed formula designed', product.description, 0);
+        setLeafTextByExact('Weight grams', `${product.weight_g} grams`, 0);
+        setLeafTextByContains('Lightweight, Nutritious', product.value_proposition || 'Lightweight, Nutritious', 0);
+        setLeafTextByExact('₹70', `₹${Math.round(Number(product.price))}`, 0);
+        setLeafTextByExact('₹80', `₹${Math.round(Number(product.mrp || product.price))}`, 0);
+        setLeafTextByExact('4.2', String(product.rating), 0);
+        setLeafTextByExact('See all 212 reviews', `See all ${product.review_count || 0} reviews`, 0);
+
+        if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+          const first = data.reviews[0];
+          setLeafTextByExact('Sarah J.', first.user_name || 'Customer', 0);
+          setLeafTextByExact('2 days ago', first.created_label || 'recently', 0);
+          setLeafTextByContains('Absolutely love this!', `"${first.review_text || ''}"`, 0);
+        }
+
+        hydrateProductCards('Similar Products', data.similar || []);
+      }
+
+      if (page === 'bmi.html') {
+        const suggestions = data.suggestions && data.suggestions.length ? data.suggestions : (data.similar || []);
+        hydrateProductCards('Our Suggestions for you', suggestions);
+      }
+    } catch (_err) {
+      // Keep static fallback content if backend is unavailable.
     }
   };
 
@@ -597,6 +848,8 @@
     initCTAButtons();
     initMainBmiWidget();
     initFAQAccordion();
+    hydrateMainBestsellersFromBackend();
+    initBackendDataHydration();
     initBMIResultHydration();
     initProductPageInteractions();
     initWishlistToggle();
