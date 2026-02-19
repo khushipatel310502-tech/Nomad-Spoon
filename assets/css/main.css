@@ -24,17 +24,18 @@ body > #app {
 
 /* Make exported fixed-width blocks fluid */
 #app [style*="width: 1280px"],
-#app [style*="width: 1307.64px"],
-#app [style*="width: 600px"],
-#app [style*="width: 476px"],
-#app [style*="width: 400px"],
-#app [style*="width: 320px"],
-#app [style*="width: 300px"],
-#app [style*="width: 188px"],
-#app [style*="width: 457px"] {
+#app [style*="width: 1307.64px"] {
   width: 100% !important;
   max-width: 100% !important;
 }
+
+#app [style*="width: 600px"] { width: min(600px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 476px"] { width: min(476px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 400px"] { width: min(400px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 320px"] { width: min(320px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 300px"] { width: min(300px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 188px"] { width: min(188px, 100%) !important; max-width: 100% !important; }
+#app [style*="width: 457px"] { width: min(457px, 100%) !important; max-width: 100% !important; }
 
 #app [style*="width: 352px;"] { width: min(352px, 100%) !important; }
 #app [style*="width: 265px;"] { width: min(265px, 100%) !important; }
@@ -55,7 +56,6 @@ body > #app {
 /* Prevent shrink-to-fit behavior from inline-flex */
 #app [style*="display: inline-flex"] {
   display: flex !important;
-  width: 100%;
   max-width: 100%;
 }
 
@@ -110,6 +110,54 @@ body > #app {
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+}
+
+.interactive-click {
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.interactive-click:active {
+  transform: scale(0.98);
+}
+
+.editable-input {
+  min-width: 60px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.editable-input:focus {
+  box-shadow: 0 0 0 2px rgba(84, 109, 70, 0.25);
+}
+
+.faq-answer {
+  color: #616161;
+  font-size: 15px;
+  font-family: Inter, sans-serif;
+  line-height: 1.5;
+  padding-left: 36px;
+}
+
+.app-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  background: #212121;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+
+.app-toast.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 991px) {
