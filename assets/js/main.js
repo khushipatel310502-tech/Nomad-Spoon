@@ -82,8 +82,37 @@
     const thumbStrip = mainImage.parentElement.querySelector('div[style*="overflow: hidden"][style*="align-items: center"]');
     if (!thumbStrip) return;
 
-    const thumbs = Array.from(thumbStrip.querySelectorAll('img'));
-    if (!thumbs.length) return;
+    const rawThumbs = Array.from(thumbStrip.querySelectorAll('img'));
+    if (!rawThumbs.length) return;
+
+    // Normalize into wrapper boxes so active border is never clipped.
+    rawThumbs.forEach((img) => {
+      const currentParent = img.parentElement;
+      if (currentParent && currentParent.classList.contains('thumb-option')) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'thumb-option interactive-click';
+      wrapper.style.width = '80px';
+      wrapper.style.height = '80px';
+      wrapper.style.borderRadius = '8px';
+      wrapper.style.display = 'flex';
+      wrapper.style.alignItems = 'center';
+      wrapper.style.justifyContent = 'center';
+
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';
+
+      if (currentParent) {
+        currentParent.insertBefore(wrapper, img);
+      } else {
+        thumbStrip.appendChild(wrapper);
+      }
+      wrapper.appendChild(img);
+    });
+
+    const thumbOptions = Array.from(thumbStrip.querySelectorAll('.thumb-option'));
+    if (!thumbOptions.length) return;
 
     const sameImage = (a, b) => {
       const left = String(a || '').split('/').pop();
@@ -92,24 +121,25 @@
     };
 
     const markActiveThumb = (activeSrc) => {
-      thumbs.forEach((img) => {
-        const active = sameImage(img.getAttribute('src'), activeSrc);
-        img.style.outline = active ? '2px solid #546D46' : 'none';
-        img.style.outlineOffset = active ? '2px' : '0px';
+      thumbOptions.forEach((option) => {
+        const img = option.querySelector('img');
+        const active = img ? sameImage(img.getAttribute('src'), activeSrc) : false;
+        option.classList.toggle('active', active);
       });
     };
 
     markActiveThumb(mainImage.getAttribute('src'));
-    thumbs.forEach((img) => {
-      img.classList.add('interactive-click');
-      if (img.dataset.thumbBound === 'true') return;
-      img.addEventListener('click', () => {
+    thumbOptions.forEach((option) => {
+      const img = option.querySelector('img');
+      if (!img) return;
+      if (option.dataset.thumbBound === 'true') return;
+      option.addEventListener('click', () => {
         const nextSrc = img.getAttribute('src');
         if (!nextSrc) return;
         mainImage.setAttribute('src', nextSrc);
         markActiveThumb(nextSrc);
       });
-      img.dataset.thumbBound = 'true';
+      option.dataset.thumbBound = 'true';
     });
   };
 
@@ -763,7 +793,8 @@
         const productImages = resolveImageList(product);
         if (productImages.length) {
           imageNode.style.backgroundImage = `url("${productImages[0]}")`;
-          imageNode.style.backgroundSize = 'cover';
+          imageNode.style.backgroundSize = 'contain';
+          imageNode.style.backgroundRepeat = 'no-repeat';
           imageNode.style.backgroundPosition = 'center';
         }
       }

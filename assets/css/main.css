@@ -75,6 +75,43 @@ body > #app {
   object-fit: cover;
 }
 
+/* Product page media should show full image (no crop/zoom) */
+#app img[style*="height: 580px"] {
+  object-fit: contain !important;
+  background: #F4F4F4;
+}
+
+#app img[style*="width: 80px"][style*="height: 80px"] {
+  object-fit: contain !important;
+  background: #F4F4F4;
+}
+
+.thumb-option {
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: #F4F4F4;
+  overflow: hidden;
+}
+
+.thumb-option.active {
+  border-color: #546D46;
+}
+
+.thumb-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Similar product card image blocks: fit full product artwork */
+#app div[data-property-1="Add-to-bundle"] div[style*="background-image"] {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-color: #F4F4F4;
+}
+
 /* Absolutely positioned export images are scaled by JS */
 #app img[style*="position: absolute"] {
   max-width: none;
