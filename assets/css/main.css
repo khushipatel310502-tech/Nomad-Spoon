@@ -137,6 +137,13 @@ body > #app {
 
 /* Mobile navigation controls */
 .site-nav { position: sticky; top: 0; z-index: 40; }
+
+/* Nav horizontal spacing by breakpoint */
+#site-nav {
+  padding-left: 80px !important;
+  padding-right: 80px !important;
+}
+
 .nav-toggle {
   display: none;
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -244,6 +251,11 @@ button,
 }
 
 @media (max-width: 991px) {
+  #site-nav {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
   #app [style*="gap: 120px"] { gap: 32px !important; }
   #app [style*="gap: 40px"] { gap: 20px !important; }
   #app [style*="gap: 32px"] { gap: 16px !important; }
