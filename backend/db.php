@@ -22,8 +22,8 @@ function db(): PDO
     $host = env_value('DB_HOST', '127.0.0.1');
     $port = env_value('DB_PORT', '3306');
     $name = env_value('DB_NAME', 'nomad_spoon');
-    $user = env_value('DB_USER', 'root');
-    $pass = env_value('DB_PASS', '');
+    $user = env_value('DB_USER', 'nomad_app');
+    $pass = env_value('DB_PASS', 'Nomad@1234');
 
     $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
     $pdo = new PDO($dsn, $user, $pass, [

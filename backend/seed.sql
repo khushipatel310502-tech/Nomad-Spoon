@@ -3,11 +3,9 @@
 
 USE nomad_spoon;
 
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE reviews;
-TRUNCATE TABLE bmi_calculations;
-TRUNCATE TABLE products;
-SET FOREIGN_KEY_CHECKS = 1;
+DELETE FROM reviews;
+DELETE FROM bmi_calculations;
+DELETE FROM products;
 
 INSERT INTO `products` (`id`, `slug`, `name`, `description`, `weight_g`, `price`, `mrp`, `rating`, `review_count`, `value_proposition`, `category_tag`, `image_url`, `created_at`) VALUES (1,'berry-nut-energy-bar','Berry Nut Energy Bar','Trail-ready bar with nuts, berries, and steady-release carbs for long hikes.',50,70.00,80.00,4.3,212,'Lightweight, Nutritious','maintain','Images/Berry_nut_energy_bar.png,Images/box.jpg,Images/product.jpg,Images/product_back.jpg,Images/open_bar.jpg','2026-02-19 20:45:02'),(2,'salted-cheese-trail-mix','Salted Cheese Trail Mix','Savory mix designed for recovery and sustained mountain energy.',150,250.00,280.00,4.2,189,'Savory + Protein Rich','gain','https://placehold.co/360x253','2026-02-19 20:45:02'),(3,'mango-chilli-energy-bar','Mango Chilli Energy Bar','Tangy-sweet energy bar ideal for high-output trek sections.',50,70.00,85.00,4.1,174,'Quick Energy','maintain','Images/Mango_chilli_bar.png','2026-02-19 20:45:02'),(4,'poha-meal','Poha Meal','Ready-to-eat poha meal with balanced carbs and trail-friendly hydration support.',75,150.00,170.00,4.4,201,'Balanced Trek Meal','maintain','https://placehold.co/265x253','2026-02-19 20:45:02'),(5,'moong-dal-khichdi-meal','Moong Dal Khichdi Meal','Comfort meal with protein and easy digestibility for high-altitude recovery.',75,150.00,170.00,4.5,226,'Recovery Support','gain','Images/Moong_dal_khichdi.png','2026-02-19 20:45:02'),(6,'lean-protein-mix','Lean Protein Mix','Low-calorie, high-protein mix formulated for fat-loss phases.',120,220.00,250.00,4.0,132,'High Protein, Lower Calorie','loss','https://placehold.co/265x253','2026-02-19 20:45:02');
 INSERT INTO `reviews` (`id`, `product_id`, `user_name`, `review_text`, `rating`, `created_at`) VALUES (1,1,'Sarah J.','Absolutely love this! It has completely transformed my skin texture. Highly recommend.',4.5,'2026-02-17 20:45:02'),(2,1,'Arjun P.','Great taste and easy to carry. Perfect for long treks.',4.0,'2026-02-15 20:45:02'),(3,1,'Nisha K.','Loved the ingredients and energy boost. Will order again.',4.5,'2026-02-12 20:45:02');
