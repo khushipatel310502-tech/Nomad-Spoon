@@ -4,11 +4,59 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../backend/db.php';
 
+function normalize_image_urls(?string $raw): array
+{
+    $text = trim((string)$raw);
+    if ($text === '') {
+        return [];
+    }
+
+    if (str_starts_with($text, '[')) {
+        $decoded = json_decode($text, true);
+        if (is_array($decoded)) {
+            $images = array_values(array_filter(array_map(
+                static fn ($item): string => trim((string)$item),
+                $decoded
+            ), static fn (string $item): bool => $item !== ''));
+            if (count($images) > 0) {
+                return $images;
+            }
+        }
+    }
+
+    $parts = preg_split('/\s*(,|\|)\s*/', $text) ?: [];
+    $images = array_values(array_filter(array_map(
+        static fn ($item): string => trim((string)$item),
+        $parts
+    ), static fn (string $item): bool => $item !== ''));
+
+    if (count($images) > 0) {
+        return $images;
+    }
+
+    return [$text];
+}
+
+function with_product_images(array $product): array
+{
+    $images = normalize_image_urls(isset($product['image_url']) ? (string)$product['image_url'] : '');
+    $product['image_urls'] = $images;
+    $product['image_url'] = $images[0] ?? null;
+
+    return $product;
+}
+
+function with_products_images(array $products): array
+{
+    return array_map(static fn (array $row): array => with_product_images($row), $products);
+}
+
 try {
     $pdo = db();
 
     if (isset($_GET['all']) && (string)$_GET['all'] === '1') {
         $allProducts = $pdo->query('SELECT * FROM products ORDER BY id ASC')->fetchAll();
+        $allProducts = with_products_images($allProducts);
         json_response(['products' => $allProducts]);
     }
 
@@ -29,9 +77,12 @@ try {
         json_response(['error' => 'No product data found. Please seed the database first.'], 404);
     }
 
+    $product = with_product_images($product);
+
     $similarStmt = $pdo->prepare('SELECT * FROM products WHERE id <> :id ORDER BY rating DESC, id ASC LIMIT 6');
     $similarStmt->execute(['id' => $product['id']]);
     $similar = $similarStmt->fetchAll();
+    $similar = with_products_images($similar);
 
     $reviewStmt = $pdo->prepare('SELECT user_name, review_text, rating, created_at FROM reviews WHERE product_id = :id ORDER BY created_at DESC LIMIT 20');
     $reviewStmt->execute(['id' => $product['id']]);
@@ -48,6 +99,7 @@ try {
     $suggestStmt = $pdo->prepare('SELECT * FROM products WHERE category_tag = :tag ORDER BY rating DESC, id ASC LIMIT 6');
     $suggestStmt->execute(['tag' => $categoryTag]);
     $suggestions = $suggestStmt->fetchAll();
+    $suggestions = with_products_images($suggestions);
 
     json_response([
         'product' => $product,

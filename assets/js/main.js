@@ -48,6 +48,99 @@
 
   const leafNodes = (root = document) => Array.from(root.querySelectorAll('div, span, a')).filter((n) => n.childElementCount === 0);
 
+  const resolveImageList = (product) => {
+    if (!product || typeof product !== 'object') return [];
+
+    const fromArray = Array.isArray(product.image_urls)
+      ? product.image_urls.map((v) => String(v || '').trim()).filter(Boolean)
+      : [];
+    if (fromArray.length) return fromArray;
+
+    const raw = String(product.image_url || '').trim();
+    if (!raw) return [];
+
+    if (raw.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          const images = parsed.map((v) => String(v || '').trim()).filter(Boolean);
+          if (images.length) return images;
+        }
+      } catch (_e) {
+        // fall through to split parsing
+      }
+    }
+
+    const split = raw.split(/\s*(?:,|\|)\s*/).map((v) => v.trim()).filter(Boolean);
+    return split.length ? split : [raw];
+  };
+
+  const bindProductThumbInteractions = () => {
+    const mainImage = document.querySelector('#app img[style*="height: 580px"]');
+    if (!mainImage || !mainImage.parentElement) return;
+
+    const thumbStrip = mainImage.parentElement.querySelector('div[style*="overflow: hidden"][style*="align-items: center"]');
+    if (!thumbStrip) return;
+
+    const thumbs = Array.from(thumbStrip.querySelectorAll('img'));
+    if (!thumbs.length) return;
+
+    const sameImage = (a, b) => {
+      const left = String(a || '').split('/').pop();
+      const right = String(b || '').split('/').pop();
+      return left && right && left === right;
+    };
+
+    const markActiveThumb = (activeSrc) => {
+      thumbs.forEach((img) => {
+        const active = sameImage(img.getAttribute('src'), activeSrc);
+        img.style.outline = active ? '2px solid #546D46' : 'none';
+        img.style.outlineOffset = active ? '2px' : '0px';
+      });
+    };
+
+    markActiveThumb(mainImage.getAttribute('src'));
+    thumbs.forEach((img) => {
+      img.classList.add('interactive-click');
+      if (img.dataset.thumbBound === 'true') return;
+      img.addEventListener('click', () => {
+        const nextSrc = img.getAttribute('src');
+        if (!nextSrc) return;
+        mainImage.setAttribute('src', nextSrc);
+        markActiveThumb(nextSrc);
+      });
+      img.dataset.thumbBound = 'true';
+    });
+  };
+
+  const hydrateProductGallery = (product) => {
+    const images = resolveImageList(product);
+    if (!images.length) return;
+
+    const mainImage = document.querySelector('#app img[style*="height: 580px"]');
+    if (!mainImage || !mainImage.parentElement) return;
+
+    const thumbStrip = mainImage.parentElement.querySelector('div[style*="overflow: hidden"][style*="align-items: center"]');
+
+    mainImage.setAttribute('src', images[0]);
+
+    if (thumbStrip) {
+      thumbStrip.innerHTML = '';
+      images.forEach((src) => {
+        const img = document.createElement('img');
+        img.setAttribute('src', src);
+        img.style.width = '80px';
+        img.style.height = '80px';
+        img.style.position = 'relative';
+        img.style.borderRadius = '8px';
+        img.style.background = '#F4F4F4';
+        thumbStrip.appendChild(img);
+      });
+    }
+
+    bindProductThumbInteractions();
+  };
+
   const setLeafTextByExact = (oldText, newText, occurrence = 0, root = document) => {
     const nodes = leafNodes(root).filter((n) => (n.textContent || '').trim() === oldText);
     const target = nodes[occurrence];
@@ -244,6 +337,7 @@
       if (!href) return;
 
       el.style.cursor = 'pointer';
+      el.classList.add('interactive-click');
       if (el.dataset.routeBound === 'true') return;
 
       el.addEventListener('click', () => {
@@ -260,6 +354,7 @@
       const label = (el.textContent || '').trim();
       if (label === 'Add to Cart' || label === 'View Details' || label === 'Write a review' || label === 'Load more reviews' || label === 'See all 212 reviews') {
         el.classList.add('interactive-click');
+        if (el.parentElement) el.parentElement.classList.add('interactive-click');
       }
 
       if (label === 'Add to Cart' && el.dataset.actionBound !== 'true') {
@@ -659,10 +754,19 @@
       const weightNode = textNodes.find((n) => /\d+g$/i.test((n.textContent || '').trim()));
       const priceNode = textNodes.find((n) => /^₹/.test((n.textContent || '').trim()));
       const viewDetailsNode = textNodes.find((n) => (n.textContent || '').trim() === 'View Details');
+      const imageNode = card.querySelector('div[style*="background-image"]');
 
       if (nameNode) nameNode.textContent = product.name;
       if (weightNode) weightNode.textContent = `${product.weight_g}g`;
       if (priceNode) priceNode.textContent = `₹${Number(product.price).toFixed(2)}`;
+      if (imageNode) {
+        const productImages = resolveImageList(product);
+        if (productImages.length) {
+          imageNode.style.backgroundImage = `url("${productImages[0]}")`;
+          imageNode.style.backgroundSize = 'cover';
+          imageNode.style.backgroundPosition = 'center';
+        }
+      }
       if (viewDetailsNode) {
         viewDetailsNode.dataset.productSlug = product.slug;
         if (viewDetailsNode.parentElement) viewDetailsNode.parentElement.dataset.productSlug = product.slug;
@@ -709,6 +813,7 @@
           setLeafTextByContains('Absolutely love this!', `"${first.review_text || ''}"`, 0);
         }
 
+        hydrateProductGallery(product);
         hydrateProductCards('Similar Products', data.similar || []);
       }
 
@@ -724,13 +829,23 @@
   const initProductPageInteractions = () => {
     if (page !== 'product.html') return;
 
-    const qtyControl = document.querySelector('[data-left-icon="true"][data-right-icon="true"]');
+    bindProductThumbInteractions();
+
+    const addButton = document.getElementById('product-add-to-cart');
+    const qtyControl = document.getElementById('product-qty-control')
+      || document.querySelector('[data-left-icon="true"][data-right-icon="true"]');
+
+    let qty = 1;
+    let valueNode = null;
+    let left = null;
+    let right = null;
+
     if (qtyControl) {
-      const left = qtyControl.children[0];
+      left = qtyControl.children[0];
       const center = qtyControl.children[1];
-      const right = qtyControl.children[2];
-      const valueNode = center && center.querySelector('div');
-      let qty = valueNode ? Math.max(1, toNumber(valueNode.textContent, 3)) : 3;
+      right = qtyControl.children[2];
+      valueNode = center && center.querySelector('div');
+      qty = valueNode ? Math.max(1, toNumber(valueNode.textContent, 1)) : 1;
 
       const render = () => {
         if (valueNode) valueNode.textContent = String(qty);
@@ -751,6 +866,137 @@
           render();
         });
       }
+    }
+
+    if (addButton && qtyControl) {
+      const showQty = () => {
+        addButton.style.display = 'none';
+        qtyControl.style.display = 'flex';
+        qty = 1;
+        if (valueNode) valueNode.textContent = '1';
+      };
+
+      // Ensure initial state is Add-to-cart visible.
+      addButton.style.display = 'flex';
+      qtyControl.style.display = 'none';
+
+      addButton.classList.add('interactive-click');
+      addButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        addCartItem();
+        showQty();
+      });
+    }
+
+    const createInlineQtyControl = () => {
+      const qtyControlNode = document.createElement('div');
+      qtyControlNode.setAttribute('data-left-icon', 'true');
+      qtyControlNode.setAttribute('data-right-icon', 'true');
+      qtyControlNode.setAttribute('data-show-text', 'true');
+      qtyControlNode.style.alignSelf = 'stretch';
+      qtyControlNode.style.height = '44px';
+      qtyControlNode.style.overflow = 'hidden';
+      qtyControlNode.style.borderRadius = '8px';
+      qtyControlNode.style.outline = '1px #415436 solid';
+      qtyControlNode.style.outlineOffset = '-1px';
+      qtyControlNode.style.justifyContent = 'space-between';
+      qtyControlNode.style.alignItems = 'center';
+      qtyControlNode.style.display = 'none';
+
+      const leftBtn = document.createElement('div');
+      leftBtn.style.flex = '1 1 0';
+      leftBtn.style.height = '44px';
+      leftBtn.style.background = '#415436';
+      leftBtn.style.justifyContent = 'center';
+      leftBtn.style.alignItems = 'center';
+      leftBtn.style.display = 'flex';
+      leftBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H5V11H19V13Z" fill="white"/></svg>';
+
+      const center = document.createElement('div');
+      center.style.width = '72px';
+      center.style.justifyContent = 'center';
+      center.style.alignItems = 'center';
+      center.style.display = 'flex';
+      const value = document.createElement('div');
+      value.style.textAlign = 'center';
+      value.style.color = '#415436';
+      value.style.fontSize = '16px';
+      value.style.fontFamily = 'Inter';
+      value.style.fontWeight = '600';
+      value.style.lineHeight = '22.40px';
+      value.textContent = '1';
+      center.appendChild(value);
+
+      const rightBtn = document.createElement('div');
+      rightBtn.style.flex = '1 1 0';
+      rightBtn.style.height = '44px';
+      rightBtn.style.background = '#415436';
+      rightBtn.style.justifyContent = 'center';
+      rightBtn.style.alignItems = 'center';
+      rightBtn.style.display = 'flex';
+      rightBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="white"/></svg>';
+
+      qtyControlNode.appendChild(leftBtn);
+      qtyControlNode.appendChild(center);
+      qtyControlNode.appendChild(rightBtn);
+
+      return { qtyControlNode, leftBtn, rightBtn, value };
+    };
+
+    const similarHeading = byLeafText('Similar Products');
+    const similarSection = similarHeading && similarHeading.closest('div[style*="flex-direction: column"]');
+    if (similarSection) {
+      const cards = Array.from(similarSection.querySelectorAll('div[data-property-1="Add-to-bundle"]'));
+      cards.forEach((card) => {
+        const addLabel = Array.from(card.querySelectorAll('div'))
+          .find((n) => n.childElementCount === 0 && (n.textContent || '').trim() === 'Add to Cart');
+        if (!addLabel || addLabel.dataset.qtyEnhanced === 'true') return;
+
+        const addButtonWrap = addLabel.parentElement;
+        if (!addButtonWrap || !addButtonWrap.parentElement) return;
+
+        addLabel.dataset.qtyEnhanced = 'true';
+        addButtonWrap.classList.add('interactive-click');
+
+        const { qtyControlNode, leftBtn, rightBtn, value } = createInlineQtyControl();
+        addButtonWrap.parentElement.insertBefore(qtyControlNode, addButtonWrap.nextSibling);
+
+        let cardQty = 1;
+        const renderCardQty = () => {
+          value.textContent = String(cardQty);
+        };
+
+        const showCardQty = () => {
+          addButtonWrap.style.display = 'none';
+          qtyControlNode.style.display = 'flex';
+          cardQty = 1;
+          renderCardQty();
+        };
+
+        leftBtn.classList.add('interactive-click');
+        leftBtn.addEventListener('click', () => {
+          cardQty = Math.max(1, cardQty - 1);
+          renderCardQty();
+        });
+
+        rightBtn.classList.add('interactive-click');
+        rightBtn.addEventListener('click', () => {
+          cardQty = Math.min(99, cardQty + 1);
+          renderCardQty();
+        });
+
+        // Text click already has global Add-to-cart action bound; just swap UI.
+        addLabel.addEventListener('click', () => {
+          showCardQty();
+        });
+
+        // Clicking button area outside the text should still add item and swap UI.
+        addButtonWrap.addEventListener('click', (e) => {
+          if (e.target === addLabel || addLabel.contains(e.target)) return;
+          addCartItem();
+          showCardQty();
+        });
+      });
     }
 
     const reviewsHeading = byLeafText('Reviews & Testimonials');
@@ -821,16 +1067,27 @@
       const clickable = heart.parentElement;
       const path = heart.querySelector('path[d*="M12 21.0004"]');
       if (!clickable || !path) return;
+
+      // Keep wishlist button pinned to top-right of card image on all screen sizes.
+      clickable.style.left = 'auto';
+      clickable.style.right = '8px';
+      clickable.style.top = '8px';
+
       const key = `nomad_wishlist_${idx}`;
+      const inactivePath = path.getAttribute('d') || '';
+      const activePath = 'M12 21.1752L10.55 19.8552C5.4 15.1852 2 12.1052 2 8.3252C2 5.2452 4.42 2.8252 7.5 2.8252C9.24 2.8252 10.91 3.6352 12 4.9152C13.09 3.6352 14.76 2.8252 16.5 2.8252C19.58 2.8252 22 5.2452 22 8.3252C22 12.1052 18.6 15.1852 13.45 19.8652L12 21.1752Z';
+
       const apply = (active) => {
+        path.setAttribute('d', active ? activePath : inactivePath);
         path.setAttribute('fill', active ? '#C62828' : '#757575');
+        path.setAttribute('stroke', 'none');
       };
 
       const saved = localStorage.getItem(key) === '1';
       apply(saved);
       clickable.classList.add('interactive-click');
       clickable.addEventListener('click', () => {
-        const now = path.getAttribute('fill') !== '#C62828';
+        const now = localStorage.getItem(key) !== '1';
         apply(now);
         localStorage.setItem(key, now ? '1' : '0');
       });
