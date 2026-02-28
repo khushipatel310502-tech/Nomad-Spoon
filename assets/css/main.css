@@ -6,6 +6,7 @@ img, svg { max-width: 100%; height: auto; }
 :root {
   --container-pad: clamp(16px, 4vw, 80px);
   --container-pad-lg: clamp(16px, 4.5vw, 90px);
+  --container-pad-xl: clamp(16px, 5vw, 100px);
 }
 
 #app {
@@ -52,6 +53,8 @@ body > #app {
 #app [style*="padding-right: 80px"] { padding-right: var(--container-pad) !important; }
 #app [style*="padding-left: 90px"] { padding-left: var(--container-pad-lg) !important; }
 #app [style*="padding-right: 90px"] { padding-right: var(--container-pad-lg) !important; }
+#app [style*="padding-left: 100px"] { padding-left: var(--container-pad-xl) !important; }
+#app [style*="padding-right: 100px"] { padding-right: var(--container-pad-xl) !important; }
 
 /* Prevent shrink-to-fit behavior from inline-flex */
 #app [style*="display: inline-flex"] {
@@ -307,7 +310,79 @@ button,
   }
 }
 
+@media (max-width: 1024px) {
+  #app [style*="height: 800px;"] {
+    height: clamp(360px, 62vh, 640px) !important;
+  }
+
+  #app [style*="padding-top: 160px"] { padding-top: 88px !important; }
+  #app [style*="padding-bottom: 120px"] { padding-bottom: 72px !important; }
+
+  #app [style*="width: 352px"] {
+    width: calc(50% - 16px) !important;
+    max-width: calc(50% - 16px) !important;
+  }
+
+  #app div[data-property-1="Poha"],
+  #app div[data-property-1="Berry Nut ar"],
+  #app div[data-property-1="salted ch"],
+  #app div[data-property-1="Add-to-bundle"] {
+    flex: 1 1 calc(50% - 10px) !important;
+    max-width: calc(50% - 10px) !important;
+  }
+
+  #app [style*="background: #212121"] > div[style*="gap: 120px"] {
+    flex-wrap: wrap;
+    gap: 40px !important;
+  }
+
+  #app [style*="background: #212121"] > div[style*="gap: 120px"] > div[style*="flex: 1 1 0"] {
+    flex-wrap: wrap;
+    row-gap: 24px;
+  }
+
+  #app [style*="background: #212121"] > div[style*="gap: 120px"] > div[style*="width: 320px"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 @media (max-width: 640px) {
+  #app [style*="padding-left: 100px"],
+  #app [style*="padding-right: 100px"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  #app [style*="width: 352px"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #app div[data-property-1="Poha"],
+  #app div[data-property-1="Berry Nut ar"],
+  #app div[data-property-1="salted ch"],
+  #app div[data-property-1="Add-to-bundle"] {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  #app [style*="background: #212121"] > div[style*="gap: 120px"] > div[style*="flex: 1 1 0"] {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 24px !important;
+  }
+
+  #app [style*="font-size: 52px"] {
+    font-size: clamp(26px, 8vw, 40px) !important;
+    line-height: 1.15 !important;
+  }
+
+  #app [style*="font-size: 33px"] {
+    font-size: clamp(24px, 7vw, 32px) !important;
+    line-height: 1.2 !important;
+  }
+
   #app [style*="height: 291px"] { min-height: 291px; height: auto !important; }
   #app [style*="height: 253px"] { min-height: 253px; }
   #app [style*="font-size: 26px"] { font-size: clamp(20px, 5.5vw, 26px) !important; }
