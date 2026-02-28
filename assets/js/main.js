@@ -949,7 +949,9 @@
 
       if (page === 'bmi.html') {
         const suggestions = data.suggestions && data.suggestions.length ? data.suggestions : (data.similar || []);
+        const alternatives = data.similar && data.similar.length ? data.similar : suggestions;
         hydrateProductCards('Our Suggestions for you', suggestions);
+        hydrateProductCards('You can also try them', alternatives);
       }
     } catch (_err) {
       // Keep static fallback content if backend is unavailable.
