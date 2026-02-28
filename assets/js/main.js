@@ -171,6 +171,110 @@
     bindProductThumbInteractions();
   };
 
+  const hydrateProductReviews = (reviews) => {
+    const reviewsHeading = byLeafText('Reviews & Testimonials');
+    if (!reviewsHeading) return;
+
+    const reviewsSection = reviewsHeading.closest('div[style*="flex-direction: column"][style*="gap: 16px"]');
+    if (!reviewsSection) return;
+
+    const photosLabel = byLeafText('Customer Photos & Videos', reviewsSection);
+    const photosBlock = photosLabel
+      ? photosLabel.closest('div[style*="flex-direction: column"][style*="gap: 8px"]')
+      : null;
+
+    const anchor = photosBlock || reviewsSection.children[1] || null;
+    if (!anchor) return;
+
+    while (anchor.nextElementSibling) {
+      anchor.nextElementSibling.remove();
+    }
+
+    const list = Array.isArray(reviews) ? reviews : [];
+    if (!list.length) {
+      const empty = document.createElement('div');
+      empty.style.alignSelf = 'stretch';
+      empty.style.color = '#616161';
+      empty.style.fontSize = '16px';
+      empty.style.fontFamily = 'Inter';
+      empty.style.fontWeight = '400';
+      empty.style.lineHeight = '22.40px';
+      empty.style.wordWrap = 'break-word';
+      empty.textContent = 'No reviews yet.';
+      reviewsSection.appendChild(empty);
+      return;
+    }
+
+    list.forEach((review) => {
+      const card = document.createElement('div');
+      card.style.alignSelf = 'stretch';
+      card.style.paddingBottom = '16px';
+      card.style.borderBottom = '1px #F5F5F5 solid';
+      card.style.flexDirection = 'column';
+      card.style.justifyContent = 'flex-start';
+      card.style.alignItems = 'flex-start';
+      card.style.gap = '8px';
+      card.style.display = 'flex';
+
+      const header = document.createElement('div');
+      header.style.alignSelf = 'stretch';
+      header.style.justifyContent = 'space-between';
+      header.style.alignItems = 'flex-start';
+      header.style.display = 'inline-flex';
+
+      const left = document.createElement('div');
+      left.style.flexDirection = 'column';
+      left.style.justifyContent = 'flex-start';
+      left.style.alignItems = 'flex-start';
+      left.style.gap = '4px';
+      left.style.display = 'inline-flex';
+
+      const stars = document.createElement('div');
+      stars.style.color = '#FFC41F';
+      stars.style.fontSize = '14px';
+      stars.style.lineHeight = '14px';
+      stars.textContent = '★★★★★';
+
+      const name = document.createElement('div');
+      name.style.color = '#212121';
+      name.style.fontSize = '16px';
+      name.style.fontFamily = 'Inter';
+      name.style.fontWeight = '500';
+      name.style.lineHeight = '26.60px';
+      name.style.wordWrap = 'break-word';
+      name.textContent = String(review.user_name || 'Customer');
+
+      left.appendChild(stars);
+      left.appendChild(name);
+
+      const when = document.createElement('div');
+      when.style.color = '#757575';
+      when.style.fontSize = '11px';
+      when.style.fontFamily = 'Inter';
+      when.style.fontWeight = '400';
+      when.style.lineHeight = '13.20px';
+      when.style.wordWrap = 'break-word';
+      when.textContent = String(review.created_label || 'recently');
+
+      header.appendChild(left);
+      header.appendChild(when);
+
+      const body = document.createElement('div');
+      body.style.alignSelf = 'stretch';
+      body.style.color = '#616161';
+      body.style.fontSize = '16px';
+      body.style.fontFamily = 'Inter';
+      body.style.fontWeight = '400';
+      body.style.lineHeight = '22.40px';
+      body.style.wordWrap = 'break-word';
+      body.textContent = `"${String(review.review_text || '')}"`;
+
+      card.appendChild(header);
+      card.appendChild(body);
+      reviewsSection.appendChild(card);
+    });
+  };
+
   const setLeafTextByExact = (oldText, newText, occurrence = 0, root = document) => {
     const nodes = leafNodes(root).filter((n) => (n.textContent || '').trim() === oldText);
     const target = nodes[occurrence];
@@ -837,12 +941,7 @@
         setLeafTextByExact('4.2', String(product.rating), 0);
         setLeafTextByExact('See all 212 reviews', `See all ${product.review_count || 0} reviews`, 0);
 
-        if (Array.isArray(data.reviews) && data.reviews.length > 0) {
-          const first = data.reviews[0];
-          setLeafTextByExact('Sarah J.', first.user_name || 'Customer', 0);
-          setLeafTextByExact('2 days ago', first.created_label || 'recently', 0);
-          setLeafTextByContains('Absolutely love this!', `"${first.review_text || ''}"`, 0);
-        }
+        hydrateProductReviews(Array.isArray(data.reviews) ? data.reviews : []);
 
         hydrateProductGallery(product);
         hydrateProductCards('Similar Products', data.similar || []);
@@ -1033,52 +1132,16 @@
     const reviewsHeading = byLeafText('Reviews & Testimonials');
     const writeReview = byLeafText('Write a review');
     const loadMore = byLeafText('Load more reviews');
-    const seeAll = byLeafText('See all 212 reviews');
+    const seeAll = leafNodes(document).find((n) => (n.textContent || '').includes('See all') && (n.textContent || '').includes('reviews'));
 
-    const reviewSeeds = [
-      { name: 'Arjun P.', when: '4 days ago', text: 'Great taste and easy to carry. Perfect for long treks.' },
-      { name: 'Nisha K.', when: '1 week ago', text: 'Loved the ingredients and energy boost. Will order again.' }
-    ];
-    let loaded = 0;
-
-    const createReviewCard = (seed) => {
-      const card = document.createElement('div');
-      card.style.alignSelf = 'stretch';
-      card.style.paddingBottom = '16px';
-      card.style.borderBottom = '1px #F5F5F5 solid';
-      card.style.display = 'flex';
-      card.style.flexDirection = 'column';
-      card.style.gap = '8px';
-      card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-size:16px;font-weight:500;color:black">${seed.name}</div><div style="font-size:11px;color:#757575">${seed.when}</div></div><div style="font-size:16px;color:#616161;line-height:22.4px">\"${seed.text}\"</div>`;
-      return card;
-    };
-
-    const loadIntoList = () => {
-      if (!loadMore || loaded >= reviewSeeds.length) return;
-      const list = loadMore.closest('div[style*="flex-direction: column"]');
-      if (!list) return;
-      list.insertBefore(createReviewCard(reviewSeeds[loaded]), loadMore.parentElement);
-      loaded += 1;
-      if (loaded >= reviewSeeds.length) {
-        loadMore.textContent = 'No more reviews';
-        loadMore.style.opacity = '0.6';
-      }
-    };
-
-    if (loadMore) {
-      loadMore.classList.add('interactive-click');
-      loadMore.addEventListener('click', loadIntoList);
+    if (loadMore && loadMore.parentElement) {
+      loadMore.parentElement.style.display = 'none';
     }
 
     if (writeReview) {
       writeReview.classList.add('interactive-click');
       writeReview.addEventListener('click', () => {
-        const text = window.prompt('Write your review:');
-        if (!text) return;
-        const list = loadMore && loadMore.closest('div[style*="flex-direction: column"]');
-        if (!list) return;
-        list.insertBefore(createReviewCard({ name: 'You', when: 'just now', text }), loadMore.parentElement);
-        showToast('Review submitted');
+        showToast('Submit reviews from backend/admin panel');
       });
     }
 
