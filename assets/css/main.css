@@ -1075,15 +1075,20 @@ button,
 
 @media (max-width: 768px) {
   .ns-hero-content {
-    width: min(380px, 65%) !important;
-    max-width: min(380px, 65%) !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  /* Hide subtitle on smaller screens */
+  .ns-hero-content > div:last-child {
+    display: none !important;
   }
 }
 
 @media (max-width: 480px) {
   .ns-hero-content {
-    width: min(310px, 78%) !important;
-    max-width: min(310px, 78%) !important;
+    width: 50% !important;
+    max-width: 50% !important;
     left: 12px !important;
   }
 }
