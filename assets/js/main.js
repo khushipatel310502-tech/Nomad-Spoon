@@ -153,6 +153,10 @@
     const thumbStrip = mainImage.parentElement.querySelector('div[style*="overflow: hidden"][style*="align-items: center"]');
 
     mainImage.setAttribute('src', images[0]);
+    mainImage.style.background = 'transparent';
+    if (mainImage.parentElement) {
+      mainImage.parentElement.style.background = 'transparent';
+    }
 
     if (thumbStrip) {
       thumbStrip.innerHTML = '';
@@ -163,7 +167,7 @@
         img.style.height = '80px';
         img.style.position = 'relative';
         img.style.borderRadius = '8px';
-        img.style.background = '#F4F4F4';
+        img.style.background = 'transparent';
         thumbStrip.appendChild(img);
       });
     }
@@ -893,13 +897,14 @@
       if (nameNode) nameNode.textContent = product.name;
       if (weightNode) weightNode.textContent = `${product.weight_g}g`;
       if (priceNode) priceNode.textContent = `₹${Number(product.price).toFixed(2)}`;
+      const productImages = resolveImageList(product);
       if (imageNode) {
-        const productImages = resolveImageList(product);
         if (productImages.length) {
           imageNode.style.backgroundImage = `url("${productImages[0]}")`;
           imageNode.style.backgroundSize = 'contain';
           imageNode.style.backgroundRepeat = 'no-repeat';
           imageNode.style.backgroundPosition = 'center';
+          imageNode.style.backgroundColor = 'transparent';
         }
       }
       if (viewDetailsNode) {
@@ -910,10 +915,49 @@
   };
 
   const hydrateMainBestsellersFromBackend = async () => {
+    if (page !== 'main.html') return;
+
     try {
       const data = await apiRequest('product.php?all=1', { method: 'GET' });
       const products = Array.isArray(data.products) ? data.products : [];
       if (!products.length) return;
+
+      const byRating = [...products].sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
+
+      const heroTitle = byLeafText('Fuel Every Step of Your Journey');
+      const heroSection = heroTitle && heroTitle.closest('div[style*="height: 800px"]');
+      if (heroSection) {
+        const heroImages = Array.from(heroSection.querySelectorAll('img'));
+        const first = byRating[0] || products[0];
+        const second = byRating[1] || products[1] || first;
+        const firstImages = resolveImageList(first);
+        const secondImages = resolveImageList(second);
+        if (heroImages[0] && firstImages[0]) heroImages[0].setAttribute('src', firstImages[0]);
+        if (heroImages[1] && secondImages[0]) heroImages[1].setAttribute('src', secondImages[0]);
+      }
+
+      const categoriesHeading = byLeafText('Categories');
+      const categoriesSection = categoriesHeading && categoriesHeading.parentElement;
+      if (categoriesSection) {
+        const categoryCards = Array.from(categoriesSection.querySelectorAll('div[data-property-1="E1"], div[data-property-1="R1"], div[data-property-1="T1"]'));
+        const tags = Array.from(new Set(byRating.map((p) => String(p.category_tag || '').trim()).filter(Boolean)));
+
+        categoryCards.forEach((card, idx) => {
+          const tag = tags[idx] || tags[0];
+          if (!tag) return;
+          const featuredByTag = byRating.find((p) => String(p.category_tag || '').trim() === tag);
+          if (!featuredByTag) return;
+
+          card.dataset.productSlug = featuredByTag.slug;
+          card.classList.add('interactive-click');
+          if (card.dataset.routeBound !== 'true') {
+            card.addEventListener('click', () => {
+              window.location.href = `product.html?slug=${encodeURIComponent(featuredByTag.slug)}`;
+            });
+            card.dataset.routeBound = 'true';
+          }
+        });
+      }
 
       hydrateProductCards('Discover our bestsellers', products);
     } catch (_err) {
@@ -1190,6 +1234,67 @@
     });
   };
 
+  const initReusableAnimations = () => {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const markEnter = (elements, startDelay = 0) => {
+      Array.from(elements || []).forEach((el, idx) => {
+        if (!el || el.dataset.nsAnimBound === 'true') return;
+        el.classList.add('ns-anim-enter');
+
+        const delayClass = `ns-anim-delay-${Math.min(5, Math.max(1, startDelay + idx))}`;
+        el.classList.add(delayClass);
+        el.dataset.nsAnimBound = 'true';
+      });
+    };
+
+    const rootBlocks = Array.from(document.querySelectorAll('#app > div')).filter((el) => el.id !== 'site-nav');
+    let pageSections = [];
+
+    rootBlocks.forEach((root) => {
+      const children = Array.from(root.children || []).filter((el) => el && el.nodeType === 1);
+      if (children.length > 1) {
+        pageSections.push(...children);
+      } else {
+        pageSections.push(root);
+      }
+    });
+
+    pageSections = pageSections.filter((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.height > 120;
+    });
+
+    markEnter(pageSections, 1);
+
+    const visualCards = Array.from(document.querySelectorAll(
+      '#app div[data-property-1="Add-to-bundle"], '
+      + '#app div[data-property-1="E1"], '
+      + '#app div[data-property-1="R1"], '
+      + '#app div[data-property-1="T1"], '
+      + '#app div[data-property-1="False"][style*="padding: 24px"][style*="border-radius: 12px"]'
+    ));
+    visualCards.forEach((card) => card.classList.add('ns-anim-card'));
+
+    const floatMedia = Array.from(document.querySelectorAll(
+      '#app img[style*="height: 580px"], '
+      + '#app div[data-property-1="Add-to-bundle"] div[style*="background-image"], '
+      + '#app div[style*="width: 674px"][style*="position: relative"] img'
+    ));
+    floatMedia.forEach((el, idx) => {
+      if (idx < 4) el.classList.add('ns-anim-float');
+    });
+
+    const enterNodes = Array.from(document.querySelectorAll('.ns-anim-enter'));
+    if (!enterNodes.length) return;
+
+    // Reveal all animated sections right away so content never appears missing
+    // before the user scrolls.
+    requestAnimationFrame(() => {
+      enterNodes.forEach((el) => el.classList.add('ns-visible'));
+    });
+  };
+
   const applyAllResponsiveFixes = () => {
     applyResponsiveWrap();
     applyResponsiveAbsoluteImages();
@@ -1206,7 +1311,12 @@
     initBMIResultHydration();
     initProductPageInteractions();
     initWishlistToggle();
+    initReusableAnimations();
     applyAllResponsiveFixes();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initReusableAnimations();
   });
 
   window.addEventListener('resize', () => {
