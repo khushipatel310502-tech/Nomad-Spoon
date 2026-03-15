@@ -1179,6 +1179,197 @@
     const writeReview = byLeafText('Write a review');
     const loadMore = byLeafText('Load more reviews');
     const seeAll = leafNodes(document).find((n) => (n.textContent || '').includes('See all') && (n.textContent || '').includes('reviews'));
+    const productSlug = new URLSearchParams(window.location.search).get('slug') || 'berry-nut-energy-bar';
+
+    let currentProductPromise = null;
+    let reviewFormWrap = null;
+
+    const getCurrentProductData = async () => {
+      if (!currentProductPromise) {
+        currentProductPromise = apiRequest(`product.php?slug=${encodeURIComponent(productSlug)}`, { method: 'GET' })
+          .then((data) => (data && data.product ? data.product : null));
+      }
+      return currentProductPromise;
+    };
+
+    const refreshReviewsFromBackend = async () => {
+      const data = await apiRequest(`product.php?slug=${encodeURIComponent(productSlug)}`, { method: 'GET' });
+      const reviews = Array.isArray(data && data.reviews) ? data.reviews : [];
+      hydrateProductReviews(reviews);
+
+      const countText = `See all ${reviews.length} reviews`;
+      setLeafTextByContains('See all', countText, 0);
+    };
+
+    const buildReviewForm = () => {
+      const wrapper = document.createElement('div');
+      wrapper.style.alignSelf = 'stretch';
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.gap = '10px';
+      wrapper.style.padding = '14px';
+      wrapper.style.background = '#F8F8F8';
+      wrapper.style.border = '1px solid #EAEAEA';
+      wrapper.style.borderRadius = '8px';
+
+      const title = document.createElement('div');
+      title.textContent = 'Share your review';
+      title.style.color = '#212121';
+      title.style.fontFamily = 'Inter';
+      title.style.fontSize = '15px';
+      title.style.fontWeight = '600';
+
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.placeholder = 'Your name';
+      nameInput.maxLength = 120;
+      nameInput.style.width = '100%';
+      nameInput.style.padding = '10px 12px';
+      nameInput.style.border = '1px solid #D9D9D9';
+      nameInput.style.borderRadius = '6px';
+      nameInput.style.fontSize = '14px';
+      nameInput.style.fontFamily = 'Inter';
+
+      const ratingSelect = document.createElement('select');
+      ratingSelect.style.width = '100%';
+      ratingSelect.style.padding = '10px 12px';
+      ratingSelect.style.border = '1px solid #D9D9D9';
+      ratingSelect.style.borderRadius = '6px';
+      ratingSelect.style.fontSize = '14px';
+      ratingSelect.style.fontFamily = 'Inter';
+      [5, 4, 3, 2, 1].forEach((value) => {
+        const opt = document.createElement('option');
+        opt.value = String(value);
+        opt.textContent = `${value} star${value > 1 ? 's' : ''}`;
+        ratingSelect.appendChild(opt);
+      });
+
+      const reviewInput = document.createElement('textarea');
+      reviewInput.placeholder = 'Write your review';
+      reviewInput.maxLength = 1200;
+      reviewInput.style.width = '100%';
+      reviewInput.style.minHeight = '96px';
+      reviewInput.style.padding = '10px 12px';
+      reviewInput.style.border = '1px solid #D9D9D9';
+      reviewInput.style.borderRadius = '6px';
+      reviewInput.style.fontSize = '14px';
+      reviewInput.style.fontFamily = 'Inter';
+      reviewInput.style.resize = 'vertical';
+
+      const actions = document.createElement('div');
+      actions.style.display = 'flex';
+      actions.style.gap = '8px';
+      actions.style.flexWrap = 'wrap';
+
+      const submitBtn = document.createElement('button');
+      submitBtn.type = 'button';
+      submitBtn.textContent = 'Submit review';
+      submitBtn.style.padding = '10px 16px';
+      submitBtn.style.background = '#546D46';
+      submitBtn.style.color = '#fff';
+      submitBtn.style.border = '0';
+      submitBtn.style.borderRadius = '6px';
+      submitBtn.style.fontSize = '14px';
+      submitBtn.style.fontFamily = 'Inter';
+      submitBtn.style.fontWeight = '600';
+      submitBtn.classList.add('interactive-click');
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.type = 'button';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.padding = '10px 14px';
+      cancelBtn.style.background = '#F0F0F0';
+      cancelBtn.style.color = '#212121';
+      cancelBtn.style.border = '1px solid #DADADA';
+      cancelBtn.style.borderRadius = '6px';
+      cancelBtn.style.fontSize = '14px';
+      cancelBtn.style.fontFamily = 'Inter';
+      cancelBtn.classList.add('interactive-click');
+
+      const status = document.createElement('div');
+      status.style.fontSize = '13px';
+      status.style.fontFamily = 'Inter';
+      status.style.minHeight = '16px';
+
+      const setStatus = (message, isError = false) => {
+        status.textContent = message;
+        status.style.color = isError ? '#B42318' : '#027A48';
+      };
+
+      submitBtn.addEventListener('click', async () => {
+        const userName = String(nameInput.value || '').trim();
+        const reviewText = String(reviewInput.value || '').trim();
+        const rating = Number(ratingSelect.value || '5');
+
+        if (!userName) {
+          setStatus('Please enter your name.', true);
+          return;
+        }
+        if (!reviewText) {
+          setStatus('Please write your review.', true);
+          return;
+        }
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.7';
+          setStatus('Submitting review...');
+
+          const product = await getCurrentProductData();
+          if (!product || !product.id) {
+            throw new Error('Product details not found');
+          }
+
+          await apiRequest('admin/reviews.php', {
+            method: 'POST',
+            body: JSON.stringify({
+              product_id: Number(product.id),
+              user_name: userName,
+              review_text: reviewText,
+              rating,
+            })
+          });
+
+          await refreshReviewsFromBackend();
+          setStatus('Thanks! Your review was submitted.');
+          showToast('Review submitted successfully');
+
+          nameInput.value = '';
+          reviewInput.value = '';
+          ratingSelect.value = '5';
+
+          setTimeout(() => {
+            if (wrapper.parentElement) {
+              wrapper.parentElement.removeChild(wrapper);
+            }
+            reviewFormWrap = null;
+          }, 900);
+        } catch (err) {
+          setStatus(err instanceof Error ? err.message : 'Failed to submit review', true);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+        }
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        if (wrapper.parentElement) {
+          wrapper.parentElement.removeChild(wrapper);
+        }
+        reviewFormWrap = null;
+      });
+
+      actions.appendChild(submitBtn);
+      actions.appendChild(cancelBtn);
+      wrapper.appendChild(title);
+      wrapper.appendChild(nameInput);
+      wrapper.appendChild(ratingSelect);
+      wrapper.appendChild(reviewInput);
+      wrapper.appendChild(actions);
+      wrapper.appendChild(status);
+
+      return wrapper;
+    };
 
     if (loadMore && loadMore.parentElement) {
       loadMore.parentElement.style.display = 'none';
@@ -1187,7 +1378,20 @@
     if (writeReview) {
       writeReview.classList.add('interactive-click');
       writeReview.addEventListener('click', () => {
-        showToast('Submit reviews from backend/admin panel');
+        if (!reviewsHeading) return;
+
+        if (reviewFormWrap && reviewFormWrap.parentElement) {
+          reviewFormWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        const reviewsSection = reviewsHeading.closest('div[style*="flex-direction: column"][style*="gap: 16px"]');
+        const headerRow = reviewsHeading.parentElement;
+        if (!reviewsSection || !headerRow) return;
+
+        reviewFormWrap = buildReviewForm();
+        reviewsSection.insertBefore(reviewFormWrap, headerRow.nextSibling);
+        reviewFormWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }
 
